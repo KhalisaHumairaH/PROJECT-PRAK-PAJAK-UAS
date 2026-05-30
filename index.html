@@ -1,31 +1,18 @@
-div></div>
+</div>
           </div>
-          
-          <!-- Rincian Ledger Gaji -->
-          <button class="collapse-btn" id="g_led_btn">
-            <span>Rincian Perhitungan Pajak (Skema TER & Pasal 17)</span>
-            <svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
-          </button>
-          <div class="collapse-body pad" id="g_led">
-            <div class="card card-pad" style="background:var(--surface-2)">
-              <div class="ledger-title">Kalkulasi Bulanan (Jan - Nov)</div>
-              <div class="lg-row"><div class="lbl">Kategori TER</div><div class="val" id="g_l_cat">Kategori A</div></div>
-              <div class="lg-row"><div class="lbl">Tarif Efektif (TER)</div><div class="val" id="g_l_ter_rate">0%</div></div>
-              <div class="lg-row"><div class="lbl">Potongan Pajak / Bulan</div><div class="val" id="g_l_ter_tax">Rp 0</div></div>
-              
-              <div class="ledger-title" style="margin-top:20px">Proyeksi Desember (Masa Pajak Terakhir)</div>
-              <div class="lg-row"><div class="lbl">Penghasilan Bruto Setahun</div><div class="val" id="g_l_yr_gross">Rp 0</div></div>
-              <div class="lg-row minus"><div class="lbl">Biaya Jabatan <small>(5%, maks Rp 6jt)</small></div><div class="val" id="g_l_yr_bj">Rp 0</div></div>
-              <div class="lg-row minus"><div class="lbl">Iuran JHT & JP Terpotong</div><div class="val" id="g_l_yr_bpjs">Rp 0</div></div>
-              <div class="lg-row"><div class="lbl">Penghasilan Netto Setahun</div><div class="val" id="g_l_yr_net">Rp 0</div></div>
-              <div class="lg-row minus"><div class="lbl">PTKP <small>(Status Sesuai Kuota)</small></div><div class="val" id="g_l_yr_ptkp">Rp 0</div></div>
-              <div class="lg-row" style="border-bottom:1.5px solid var(--line-strong)"><div class="lbl">Penghasilan Kena Pajak (PKP)</div><div class="val" id="g_l_yr_pkp">Rp 0</div></div>
-              <div class="lg-row"><div class="lbl">Total PPh Terutang Setahun</div><div class="val" id="g_l_yr_tax_total">Rp 0</div></div>
-              <div class="lg-row minus"><div class="lbl">Sudah Dipotong (Jan-Nov)</div><div class="val" id="g_l_yr_tax_paid">Rp 0</div></div>
-              <div class="lg-row total"><div class="lbl">Potongan Pajak Desember</div><div class="val" id="g_l_dec_tax">Rp 0</div></div>
+          <div class="stat-grid">
+            <div class="stat"><div class="k">Gaji kotor / bulan</div><div class="v" id="g_gross">Rp 0</div></div>
+            <div class="stat"><div class="k">Pajak penghasilan / bulan</div><div class="v" id="g_tax">Rp 0</div></div>
+          </div>
+          <div class="card-pad" style="border-top:1px solid rgba(255,255,255,.14)">
+            <button class="collapse-btn" id="g_det_btn" style="background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.2); color:#fff; margin-top:0">
+              <span>Rincian Perhitungan (TER)</span>
+              <svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
+            </button>
+            <div class="collapse-body" id="g_det" style="color:rgba(255,255,255,.9); font-size:0.9rem; padding-top:14px;">
+              <div id="g_det_text"></div>
             </div>
           </div>
-          
         </div>
       </div>
     </div>
@@ -34,43 +21,40 @@ div></div>
   <!-- ============ KERJA LEPAS ============ -->
   <section class="view" id="v-lepas">
     <button class="back" data-go="home">← Pilihan lain</button>
-    <div class="view-head"><h2><span class="ic">💻</span> Kerja Lepas / Profesional</h2><p>Penghitungan PPh 21 Orang Pribadi Menggunakan Metode Norma (NPPN) 50%.</p></div>
+    <div class="view-head"><h2><span class="ic">💻</span> Kerja Lepas & Tenaga Ahli</h2><p>Hitung potongan PPh Pasal 21 untuk freelancer, konsultan, desain grafis, dll.</p></div>
     <div class="grid">
       <div class="card card-pad">
         <div class="q">
-          <label class="q-label">Total Penghasilan / Bruto Sebulan?</label>
-          <div class="q-hint">Total akumulasi honorarium atau komisi yang diterima bulan ini.</div>
+          <label class="q-label">Berapa akumulasi honor / komisi bulan ini?</label>
           <div class="input-money big"><span class="rp">Rp</span><input id="l_bruto" inputmode="numeric" value="15.000.000"></div>
         </div>
         <div class="q">
-          <label class="q-label">Jenis Profesi Pekerjaan Bebas</label>
-          <select id="l_jenis">
-            <option value="0.5">Tenaga Ahli (Dokter, Pengacara, Konsultan, Akuntan) - Netto 50%</option>
-            <option value="0.5">Penulis, Artis, Musisi, Olahragawan - Netto 50%</option>
-            <option value="0.5">Agen Asuransi, MLM, Surveyor - Netto 50%</option>
-          </select>
+          <label class="q-label">Metode Penghitungan</label>
+          <div class="opt-list">
+            <div class="opt on" data-v="bukan-pegawai">
+              <div class="rad"></div>
+              <div class="tx"><b>Bukan Pegawai (Potongan Langsung)</b><span>Dasar pengenaan pajak sebesar 50% dari honor bruto (Pasal 21)</span></div>
+            </div>
+            <div class="opt" data-v="nppn">
+              <div class="rad"></div>
+              <div class="tx"><b>Norma (NPPN) - Estimasi Tahunan</b><span>Menggunakan asumsi persentase norma neto (misal: 50% untuk jasa)</span></div>
+            </div>
+          </div>
         </div>
-        <div class="q">
-          <label class="q-label">Status PTKP Kamu?</label>
-          <select id="l_ptkp">
-            <option value="54000000">TK/0 (Lajang, Tanpa Tanggungan) — Rp 54jt</option>
-            <option value="67500000">TK/1 / K/0 (1 Tanggungan / Menikah) — Rp 67,5jt</option>
-            <option value="81000000">TK/2 / K/1 (2 Tanggungan) — Rp 81jt</option>
-            <option value="94500000">TK/3 / K/2 (3 Tanggungan) — Rp 94,5jt</option>
-            <option value="108000000">K/3 (Menikah, 3 Tanggungan) — Rp 108jt</option>
-          </select>
+        <div id="l_npwp_box" class="q">
+          <div class="toggle on" id="l_npwp"><div class="tx"><b>Memiliki NPWP / NIK Valid?</b><span>Jika tidak memiliki NPWP, tarif akan dipotong 20% lebih tinggi.</span></div><div class="switch"></div></div>
         </div>
       </div>
       <div>
-        <div class="card result" style="background:linear-gradient(158deg, var(--ink) 0%, #332E25 100%)">
+        <div class="card result">
           <div class="card-pad">
-            <div class="res-label">Estimasi PPh 21 Dipotong (Metode Tarif Progresif Efektif)</div>
-            <div class="res-big" id="l_tax_display">Rp 0</div>
-            <p class="res-note" style="margin-top:16px">Penghasilan Netto dihitung sebesar <b>50% dari Bruto</b> sesuai regulasi dasar pemotongan PPh 21 Bukan Pegawai.</p>
+            <div class="res-label">Estimasi Take-Home Pay (Setelah Pajak)</div>
+            <div class="res-big" id="l_net">Rp 0</div>
+            <div class="res-note" id="l_note">Pajak yang dipotong oleh pemberi kerja: <b id="l_tax_val">Rp 0</b></div>
           </div>
           <div class="stat-grid">
-            <div class="stat"><div class="k">Dasar Pemajakan (Dasar TER)</div><div class="v" id="l_dpp">Rp 0</div></div>
-            <div class="stat"><div class="k">Sisa Pendapatan Bersih</div><div class="v" id="l_netto">Rp 0</div></div>
+            <div class="stat"><div class="k">Dasar Pengenaan Pajak (DPP)</div><div class="v" id="l_dpp">Rp 0</div></div>
+            <div class="stat"><div class="k">Tarif Efektif Berlaku</div><div class="v" id="l_rate">0%</div></div>
           </div>
         </div>
       </div>
@@ -80,35 +64,34 @@ div></div>
   <!-- ============ USAHA KECIL ============ -->
   <section class="view" id="v-usaha">
     <button class="back" data-go="home">← Pilihan lain</button>
-    <div class="view-head"><h2><span class="ic">🏪</span> Usaha Kecil / UMKM</h2><p>Pajak Final 0.5% untuk Omzet Toko, Online Shop, atau Jasa Perorangan.</p></div>
+    <div class="view-head"><h2><span class="ic">🏪</span> Pelaku Usaha / UMKM</h2><p>Khusus omzet toko, online shop, atau jasa perorangan di bawah Rp 4,8 Miliar/tahun.</p></div>
     <div class="grid">
       <div class="card card-pad">
         <div class="q">
-          <label class="q-label">Omzet / Peredaran Bruto Bulan Ini</label>
-          <div class="input-money big"><span class="rp">Rp</span><input id="u_omzet" inputmode="numeric" value="60.000.000"></div>
+          <label class="q-label">Berapa omzet (omset kotor) bulan ini?</label>
+          <div class="input-money big"><span class="rp">Rp</span><input id="u_omzet" inputmode="numeric" value="50.000.000"></div>
         </div>
         <div class="q">
-          <label class="q-label">Akumulasi Omzet Bulan-Bulan Sebelumnya</label>
-          <div class="q-hint">Penting: WP Orang Pribadi mendapatkan fasilitas bebas pajak untuk omzet sampai Rp 500 Juta setahun (UU HPP).</div>
-          <div class="input-money"><span class="rp">Rp</span><input id="u_prev" inputmode="numeric" value="460.000.000"></div>
+          <label class="q-label">Total Omzet Kumulatif Sejak Awal Tahun</label>
+          <div class="q-hint">Untuk menghitung fasilitas bebas pajak Rp 500 juta bagi Omzet Pribadi.</div>
+          <div class="input-money"><span class="rp">Rp</span><input id="u_kumulatif" inputmode="numeric" value="450.000.000"></div>
+        </div>
+        <div class="q">
+          <label class="q-label">Bentuk Badan Usaha</label>
+          <div class="seg" id="u_badan"><button data-v="pribadi" class="on">Orang Pribadi</button><button data-v="badan">Badan (CV/PT)</button></div>
         </div>
       </div>
       <div>
         <div class="card card-pad">
-          <h3 style="font-family:'Fraunces', serif; margin-bottom:14px">Perhitungan PPh Final UMKM</h3>
+          <h3 style="font-family:'Fraunces', serif; margin-bottom:14px;">Hasil Pajak Final UMKM</h3>
           <div class="bigstat">
-            <div class="row"><div class="lbl">Total Omzet s/d Bulan Ini</div><div class="val" id="u_tot_omzet">Rp 0</div></div>
-            <div class="row"><div class="lbl">Porsi Omzet Bebas Pajak (Maks Rp 500jt)</div><div class="val" id="u_free_zone" style="color:var(--green)">Rp 0</div></div>
-            <div class="row"><div class="lbl">Porsi Omzet Dikenakan Pajak (0.5%)</div><div class="val" id="u_taxable_zone" style="color:var(--gold)">Rp 0</div></div>
-            <div class="row" style="border-top:1.5px solid var(--line-strong); padding-top:14px">
-              <div class="lbl" style="font-weight:700; color:var(--ink)">Pajak Harus Dibayar Bulan Ini</div>
-              <div class="val" id="u_final_tax" style="font-size:1.4rem; color:var(--red); font-weight:700">Rp 0</div>
-            </div>
+            <div class="row"><div class="lbl">Pajak Final Harus Dibayar (0.5%)</div><div class="val" id="u_tax" style="color:var(--red); font-size:1.3rem;">Rp 0</div></div>
+            <div class="row"><div class="lbl">Sisa Kuota Bebas Pajak Mandiri</div><div class="val" id="u_kuota">Rp 0</div></div>
+            <div class="row"><div class="lbl">Omzet Bersih Bulan Ini</div><div class="val" id="u_net">Rp 0</div></div>
           </div>
-          <div class="coretax-box">
-            <div class="ct-head">📋 PETUNJUK PENYETORAN CORETAX 2026</div>
-            <div class="ct-row"><div class="l">Kode Akun Pajak (KAP)</div><div class="v"><span class="code">411128</span> PPh Final</div></div>
-            <div class="ct-row"><div class="l">Kode Jenis Setoran (KJS)</div><div class="v"><span class="code">420</span> PPh Final UMKM PP 55</div></div>
+          <div class="infobar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div>Sesuai <b>PP 55/2022</b>, wajib pajak Orang Pribadi dibebaskan dari pajak untuk omzet akumulatif Rp 500 Juta pertama dalam satu tahun pajak.</div>
           </div>
         </div>
       </div>
@@ -118,118 +101,126 @@ div></div>
   <!-- ============ PPN ============ -->
   <section class="view" id="v-ppn">
     <button class="back" data-go="home">← Pilihan lain</button>
-    <div class="view-head"><h2><span class="ic">🛍️</span> PPN Sebuah Harga</h2><p>Hitung Pajak Pertambahan Nilai (PPN) dengan implementasi tarif terbaru tahun 2026 sebesar 12%.</p></div>
+    <div class="view-head"><h2><span class="ic">🛍️</span> Kalkulator PPN 2026</h2><p>Hitung Pajak Pertambahan Nilai (Standar Baru 12%).</p></div>
     <div class="grid">
       <div class="card card-pad">
         <div class="q">
-          <label class="q-label">Nominal Angka / Harga</label>
+          <label class="q-label">Nominal Harga</label>
           <div class="input-money big"><span class="rp">Rp</span><input id="p_harga" inputmode="numeric" value="10.000.000"></div>
         </div>
         <div class="q">
-          <label class="q-label">Tipe Harga Input</label>
-          <div class="seg" id="p_tipe"><button data-v="belum" class="on">Sebelum PPN</button><button data-v="termasuk">Termasuk PPN (Include)</button></div>
+          <label class="q-label">Jenis Harga</label>
+          <div class="seg" id="p_jenis"><button data-v="belum" class="on">Belum Termasuk PPN</button><button data-v="sudah">Sudah Termasuk PPN (Include)</button></div>
         </div>
         <div class="q">
-          <label class="q-label">Tarif PPN Berlaku</label>
-          <div class="chips"><button class="on">12% (Tarif Standar 2026)</button></div>
+          <label class="q-label">Tarif PPN</label>
+          <div class="chips" id="p_tarif"><button data-v="12" class="on">12% (2026)</button><button data-v="11">11%</button></div>
         </div>
       </div>
       <div>
-        <div class="card card-pad" style="border-left:5px solid var(--green)">
-          <h3 style="font-family:'Fraunces', serif; margin-bottom:16px">Hasil Penguraian PPN</h3>
+        <div class="card card-pad" style="background:var(--surface-2)">
+          <h3 style="font-family:'Fraunces', serif; margin-bottom:14px;">Rincian Transaksi</h3>
           <div class="bigstat">
-            <div class="row"><div class="lbl">Harga Dasar (DPP)</div><div class="val" id="p_dpp">Rp 0</div></div>
-            <div class="row"><div class="lbl">Nilai PPN (12%)</div><div class="val" id="p_value" style="color:var(--green)">Rp 0</div></div>
-            <div class="row" style="border-top:1.5px solid var(--line-strong); padding-top:14px; font-size:1.1rem">
-              <div class="lbl" style="font-weight:700; color:var(--ink)">Total Harga Akhir</div>
-              <div class="val" id="p_total" style="font-weight:700; color:var(--ink)">Rp 0</div>
-            </div>
+            <div class="row"><div class="lbl">Harga Dasar (Tanpa Pajak)</div><div class="val" id="p_dasar">Rp 0</div></div>
+            <div class="row"><div class="lbl">Nilai PPN Terutang</div><div class="val" id="p_pajak" style="color:var(--gold)">Rp 0</div></div>
+            <div class="row" style="border-top:1.5px solid var(--line-strong); padding-top:14px;"><div class="lbl"><b>Total yang Harus Dibayar</b></div><div class="val" id="p_total" style="font-size:1.25rem; color:var(--green)">Rp 0</div></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ SPT TAHUNAN ============ -->
+  <!-- ============ PAJAK TAHUNAN (SPT) ============ -->
   <section class="view" id="v-tahunan">
     <button class="back" data-go="home">← Pilihan lain</button>
-    <div class="view-head"><h2><span class="ic">🧾</span> Analisis SPT Tahunan Orang Pribadi</h2><p>Evaluasi status akhir pelaporan form 1770 / 1770-S Anda.</p></div>
+    <div class="view-head"><h2><span class="ic">🧾</span> Analisis SPT Tahunan Orang Pribadi</h2><p>Estimasi akhir tahun untuk memvalidasi status Surat Pemberitahuan (SPT) Anda.</p></div>
     <div class="grid">
       <div class="card card-pad">
         <div class="q">
-          <label class="q-label">Penghasilan Netto Setahun</label>
-          <div class="input-money"><span class="rp">Rp</span><input id="s_netto" inputmode="numeric" value="120.000.000"></div>
+          <label class="q-label">Total Penghasilan Neto Setahun</label>
+          <div class="q-hint">Pendapatan bersih setelah dikurangi biaya jabatan / biaya operasional usaha resmi.</div>
+          <div class="input-money"><span class="rp">Rp</span><input id="s_neto" inputmode="numeric" value="120.000.000"></div>
         </div>
         <div class="q">
-          <label class="q-label">Status PTKP Tanggungan</label>
+          <label class="q-label">Status PTKP (Penghasilan Tidak Kena Pajak)</label>
           <select id="s_ptkp">
-            <option value="54000000">TK/0 (Rp 54.000.000)</option>
-            <option value="58500000">K/0 (Rp 58.500.000)</option>
-            <option value="63000000">K/1 (Rp 63.000.000)</option>
-            <option value="67500000">K/2 (Rp 67.500.000)</option>
-            <option value="72000000">K/3 (Rp 72.000.000)</option>
+            <option value="54000000">TK/0 — Lajang, Tanpa Tanggungan (Rp 54.000.000)</option>
+            <option value="58500000">TK/1 — Lajang, 1 Tanggungan (Rp 58.500.000)</option>
+            <option value="63000000">TK/2 — Lajang, 2 Tanggungan (Rp 63.000.000)</option>
+            <option value="67500000">TK/3 — Lajang, 3 Tanggungan (Rp 67.500.000)</option>
+            <option value="58500000">K/0 — Menikah, Tanpa Tanggungan (Rp 58.500.000)</option>
+            <option value="63000000">K/1 — Menikah, 1 Tanggungan (Rp 63.000.000)</option>
+            <option value="67500000">K/2 — Menikah, 2 Tanggungan (Rp 67.500.000)</option>
+            <option value="72000000">K/3 — Menikah, 3 Tanggungan (Rp 72.000.000)</option>
           </select>
         </div>
         <div class="q">
-          <label class="q-label">Total Pajak yang Sudah Dipotong Pihak Lain</label>
-          <div class="q-hint">Jumlahkan total kredit pajak berdasarkan lembar bukti potong A1/A2 atau bupot final non-terikat.</div>
-          <div class="input-money"><span class="rp">Rp</span><input id="s_kredit" inputmode="numeric" value="3.300.000"></div>
+          <label class="q-label">Pajak yang Sudah Dipotong Pihak Lain</label>
+          <div class="q-hint">Total dari bukti potong (Formulir 1721-A1 atau Bukti Potong Freelance) sepanjang tahun.</div>
+          <div class="input-money"><span class="rp">Rp</span><input id="s_kredit" inputmode="numeric" value="3.000.000"></div>
         </div>
       </div>
       <div>
-        <div class="card result" id="s_card_color">
+        <div class="card result">
           <div class="card-pad">
             <div class="res-label">Status Hasil Akhir SPT</div>
-            <div class="res-big" id="s_status_big" style="font-size:2.8rem">NIHIL</div>
-            <div id="s_verdict_badge" class="verdict nihil">✓ Terhitung Akurat</div>
-            <div class="res-note" id="s_note">Pajak terutang sama persis dengan nominal pemotongan perusahaan. Tidak ada kewajiban setor tambahan.</div>
+            <div class="res-big" id="s_verdict_val">Rp 0</div>
+            <div id="s_badge" class="verdict nihil">Memuat...</div>
           </div>
           <div class="stat-grid">
-            <div class="stat"><div class="k">Total PPh Terutang</div><div class="v" id="s_terutang">Rp 0</div></div>
-            <div class="stat"><div class="k">Selisih Angka Nominal</div><div class="v" id="s_selisih">Rp 0</div></div>
+            <div class="stat"><div class="k">Penghasilan Kena Pajak (PKP)</div><div class="v" id="s_pkp">Rp 0</div></div>
+            <div class="stat"><div class="k">Total PPh Terutang Aktual</div><div class="v" id="s_terutang">Rp 0</div></div>
           </div>
+        </div>
+        <div class="coretax-box">
+          <div class="ct-head">📍 Rencana Validasi Coretax System</div>
+          <div class="ct-row"><div class="l">Kode Jenis Setoran</div><div class="v"><span class="code">411125-200</span> (PPh Pasal 29)</div></div>
+          <div class="ct-note">Pastikan kebenaran data ini sebelum mengunggah e-Filing lewat portal DJP Online terbaru.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ PRO/HR WORKSPACE ============ -->
+  <!-- ============ PRO/HR MODE ============ -->
   <section class="view" id="v-pro">
-    <button class="back" data-go="home">← Panel Utama</button>
-    <div class="view-head"><h2><span class="ic">🛠️</span> HR &amp; Profesional Dashboard</h2><p>Kelola data payroll multiguna. Lakukan simulasi perpajakan TER massal otomatis.</p></div>
+    <button class="back" data-go="home">← Pilihan lain</button>
+    <div class="view-head"><h2><span class="ic">🛠️</span> Panel Profesional & Penggajian (HR)</h2><p>Kelola data komparatif multipel atau simulasi batch langsung di browser.</p></div>
     
     <div class="toolbar">
-      <button class="btn primary" id="p_add_row">＋ Tambah Baris Pegawai</button>
-      <button class="btn gold" id="p_import_btn">📥 Impor Excel (.xlsx)</button>
-      <input type="file" id="p_file_input" class="file-hidden" accept=".xlsx, .xls">
-      <button class="btn" id="p_export_btn">📤 Ekspor Data Payroll</button>
+      <button class="btn primary" id="p_add_row">＋ Tambah Baris Manual</button>
+      <button class="btn gold" id="p_import_btn">📥 Impor Excel / CSV</button>
+      <input type="file" id="p_file" class="file-hidden" accept=".xlsx, .xls, .csv">
+      <button class="btn" id="p_export_btn">📤 Ekspor Roster Pajak</button>
       <div class="spacer"></div>
-      <div class="saved"><i class="d"></i> Live Auto-Save Enacted</div>
+      <div class="saved"><span class="d"></span>Sesi Lokal Aktif</div>
     </div>
 
     <div class="table-scroll">
-      <table class="roster" id="roster_table">
+      <table class="roster">
         <thead>
           <tr>
-            <th style="width: 50px; text-align: center;">No</th>
-            <th>Nama Pegawai</th>
-            <th class="c">Gaji Bulanan (Gross)</th>
-            <th style="width:110px">Status</th>
-            <th style="width:90px">Dep</th>
-            <th style="width:120px">BPJS Swasta</th>
-            <th class="c">Pot. PPh 21 (TER)</th>
-            <th style="width:60px; text-align:center">Aksi</th>
+            <th>Nama Karyawan</th>
+            <th>Gaji Bulanan</th>
+            <th>Status/PTKP</th>
+            <th>Tanggungan</th>
+            <th class="c">Pot. Pajak (TER)</th>
+            <th class="c">Pot. BPJS</th>
+            <th class="c">Take-Home Pay</th>
+            <th style="width:50px"></th>
           </tr>
         </thead>
-        <tbody id="p_tbody">
+        <tbody id="roster_body">
           <!-- Dinamis via JS -->
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="2">TOTAL REKAPITULASI</td>
-            <td class="c" id="f_gross">Rp 0</td>
-            <td colspan="3"></td>
-            <td class="c" id="f_tax" style="color:var(--red)">Rp 0</td>
+            <td><b>Total Ringkasan</b></td>
+            <td id="f_gross" class="c">Rp 0</td>
+            <td>-</td>
+            <td>-</td>
+            <td id="f_tax" class="c">Rp 0</td>
+            <td id="f_bpjs" class="c">Rp 0</td>
+            <td id="f_net" class="c">Rp 0</td>
             <td></td>
           </tr>
         </tfoot>
@@ -241,85 +232,56 @@ div></div>
 
 <footer>
   <div class="disclaimer">
-    <b>Disclaimer Peraturan Pemerintah:</b> Seluruh modul penghitungan disesuaikan secara adaptif mengikuti regulasi perpajakan Indonesia tahun fiskal 2024–2026, termasuk formulasi <b>TER PP 58/2023</b> dan tarif progresif lapis <b>UU HPP</b>. Hasil perhitungan bersifat estimasi kalkulatif mandiri.
+    <b>Disclaimer Penafian:</b> Perhitungan yang disajikan oleh sistem ini berbasis pada asumsi regulasi perpajakan Indonesia terbaru (Harmonisasi Peraturan Perpajakan UU HPP, skema Tarif Efektif Rata-Rata PP 58/2023). Hasil kalkulasi bersifat simulasi dan indikasi edukatif, tidak mengikat secara legal-yuridis sebagai pengganti ketetapan resmi dari Direktorat Jenderal Pajak (DJP).
   </div>
   <details class="legal">
-    <summary>Lihat Tabel Lapis Tarif & Peraturan Acuan</summary>
+    <summary>Lihat Referensi Dasar Hukum Utama</summary>
     <div class="legal-grid">
       <div class="legal-col">
-        <h5>Lapis Pajak UU HPP</h5>
+        <h5>Pajak Penghasilan</h5>
         <ul>
-          <li>s/d Rp 60 Juta: <b>5%</b></li>
-          <li>> Rp 60jt - 250jt: <b>15%</b></li>
-          <li>> Rp 250jt - 500jt: <b>25%</b></li>
-          <li>> Rp 500jt - 5 Miliar: <b>30%</b></li>
-          <li>Di atas 5 Miliar: <b>35%</b></li>
+          <li>UU No 7/2021 (UU HPP)</li>
+          <li>PP No 58/2023 (Skema TER)</li>
         </ul>
       </div>
       <div class="legal-col">
-        <h5>BPJS Cap Mandate 2026</h5>
+        <h5>Fasilitas UMKM</h5>
         <ul>
-          <li>Kesehatan: <b>1% Pekerja</b> (Maks Batas Rp 12jt)</li>
-          <li>JHT Ketenagakerjaan: <b>2%</b> dari Upah Dasar</li>
-          <li>JP Pensiun: <b>1%</b> (Batas Atas Penyesuaian 2026)</li>
+          <li>PP No 55/2022 (Bebas Rp500jt)</li>
+        </ul>
+      </div>
+      <div class="legal-col">
+        <h5>Jaminan Sosial</h5>
+        <ul>
+          <li>Batas Atas BPJS Kesehatan: <b>Rp 12.000.000</b></li>
         </ul>
       </div>
     </div>
   </details>
 </footer>
 
+<!-- ==================== JAVASCRIPT LOGIC ==================== -->
 <script>
-  // --- INTRANET STATE MANAGEMENT ---
-  const views = document.querySelectorAll('.view');
-  const picks = document.querySelectorAll('.pick, .back');
-  
-  // View Router
-  picks.forEach(p => {
-    p.addEventListener('click', () => {
-      const target = p.getAttribute('data-go');
-      if(!target) return;
-      views.forEach(v => v.classList.remove('active'));
-      const activeView = document.getElementById('v-' + target);
-      if(activeView) activeView.classList.add('active');
-      window.scrollTo(0,0);
-    });
-  });
+  // --- State & Initializations ---
+  let isDarkMode = false;
+  let rosterData = [
+    { id: 1, nama: 'Ahmad Fauzi', gaji: 9000000, status: 'lajang', dep: 0 },
+    { id: 2, nama: 'Siti Rahma', gaji: 14500000, status: 'menikah', dep: 2 }
+  ];
 
-  // Theme Switcher Toggle
-  const themeBtn = document.getElementById('t_theme');
-  themeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-  });
-
-  // Print Action Trigger
-  document.getElementById('t_print').addEventListener('click', () => window.print());
-
-  // Collapsible Component Setup
-  function initCollapse(btnId, bodyId) {
-    const btn = document.getElementById(btnId);
-    const body = document.getElementById(bodyId);
-    if(btn && body) {
-      btn.addEventListener('click', () => {
-        btn.classList.toggle('open');
-        body.classList.toggle('open');
-      });
-    }
-  }
-  initCollapse('g_adv_btn', 'g_adv');
-  initCollapse('g_led_btn', 'g_led');
-
-  // --- UTILITY FORMATTERS ---
+  // --- Helper Formatter ---
   function parseMoney(str) {
-    return parseFloat(str.replace(/\./g, '').replace(/,/g, '.')) || 0;
+    return parseFloat(str.replace(/[^0-9]/g, '')) || 0;
   }
   function formatMoney(num) {
     return 'Rp ' + Math.round(num).toLocaleString('id-ID');
   }
-  function autoFormatInput(inputElement, callback) {
-    inputElement.addEventListener('input', (e) => {
+  function setupAutoMoneyFormat(inputEl, callback) {
+    inputEl.addEventListener('input', (e) => {
       let cursor = e.target.selectionStart;
-      let val = e.target.value.replace(/\D/g, '');
-      let formatted = val ? parseFloat(val).toLocaleString('id-ID') : '';
+      let raw = e.target.value.replace(/[^0-9]/g, '');
+      if(!raw) { e.target.value = '0'; if(callback) callback(); return; }
+      let formatted = parseFloat(raw).toLocaleString('id-ID');
       let diff = formatted.length - e.target.value.length;
       e.target.value = formatted;
       e.target.setSelectionRange(cursor + diff, cursor + diff);
@@ -327,549 +289,543 @@ div></div>
     });
   }
 
-  // --- ENGINE PERPAJAKAN INDONESIA (TER 2026) ---
-  function dapatkanKategoriTER(status, tanggungan) {
-    if (status === 'lajang') {
-      if (tanggungan === 0) return 'A';
-      if (tanggungan === 1) return 'A';
-      if (tanggungan === 2) return 'B';
-      return 'B';
-    } else { // Menikah
-      if (tanggungan === 0) return 'A';
-      if (tanggungan === 1) return 'B';
-      if (tanggungan === 2) return 'B';
-      return 'C';
+  // --- Core Tax Mathematics ---
+  function getPTKPCategory(status, dep) {
+    let d = Math.min(3, Math.max(0, parseInt(dep) || 0));
+    if (status === 'menikah') return 'K/' + d;
+    return 'TK/' + d;
+  }
+
+  function getTERCategory(ptkpCat) {
+    if (['TK/0', 'TK/1', 'K/0'].includes(ptkpCat)) return 'A';
+    if (['TK/2', 'TK/3', 'K/1', 'K/2'].includes(ptkpCat)) return 'B';
+    return 'C'; // K/3
+  }
+
+  function getTERRate(category, grossMonthly) {
+    // Implementasi ringkas lookup matriks PP 58/2023
+    if (category === 'A') {
+      if (grossMonthly <= 5400000) return 0;
+      if (grossMonthly <= 5650000) return 0.0025;
+      if (grossMonthly <= 5950000) return 0.005;
+      if (grossMonthly <= 6300000) return 0.0075;
+      if (grossMonthly <= 6750000) return 0.01;
+      if (grossMonthly <= 7500000) return 0.0125;
+      if (grossMonthly <= 8550000) return 0.015;
+      if (grossMonthly <= 9650000) return 0.0175;
+      if (grossMonthly <= 10950000) return 0.02;
+      if (grossMonthly <= 11600000) return 0.0225;
+      if (grossMonthly <= 12500000) return 0.025;
+      if (grossMonthly <= 13750000) return 0.03;
+      if (grossMonthly <= 15100000) return 0.04;
+      if (grossMonthly <= 16950000) return 0.05;
+      if (grossMonthly <= 19100000) return 0.06;
+      if (grossMonthly <= 21100000) return 0.07;
+      if (grossMonthly <= 25300000) return 0.08;
+      if (grossMonthly <= 39600000) return 0.09;
+      return 0.10;
+    } else if (category === 'B') {
+      if (grossMonthly <= 6200000) return 0;
+      if (grossMonthly <= 6500000) return 0.0025;
+      if (grossMonthly <= 6850000) return 0.005;
+      if (grossMonthly <= 7300000) return 0.0075;
+      if (grossMonthly <= 7800000) return 0.01;
+      if (grossMonthly <= 8550000) return 0.0125;
+      if (grossMonthly <= 9600000) return 0.015;
+      if (grossMonthly <= 10600000) return 0.0175;
+      if (grossMonthly <= 11450000) return 0.02;
+      if (grossMonthly <= 12450000) return 0.0225;
+      if (grossMonthly <= 13500000) return 0.025;
+      if (grossMonthly <= 14600000) return 0.03;
+      if (grossMonthly <= 15850000) return 0.04;
+      if (grossMonthly <= 17450000) return 0.05;
+      if (grossMonthly <= 19600000) return 0.06;
+      if (grossMonthly <= 21850000) return 0.07;
+      if (grossMonthly <= 26100000) return 0.08;
+      if (grossMonthly <= 40750000) return 0.09;
+      return 0.10;
+    } else { // Category C
+      if (grossMonthly <= 6600000) return 0;
+      if (grossMonthly <= 6950000) return 0.0025;
+      if (grossMonthly <= 7350000) return 0.005;
+      if (grossMonthly <= 7800000) return 0.0075;
+      if (grossMonthly <= 8350000) return 0.01;
+      if (grossMonthly <= 9100000) return 0.0125;
+      if (grossMonthly <= 10050000) return 0.015;
+      if (grossMonthly <= 11100000) return 0.0175;
+      if (grossMonthly <= 12100000) return 0.02;
+      if (grossMonthly <= 13150000) return 0.0225;
+      if (grossMonthly <= 14300000) return 0.025;
+      if (grossMonthly <= 15600000) return 0.03;
+      if (grossMonthly <= 17050000) return 0.04;
+      if (grossMonthly <= 19000000) return 0.05;
+      if (grossMonthly <= 21400000) return 0.06;
+      if (grossMonthly <= 24150000) return 0.07;
+      if (grossMonthly <= 29450000) return 0.08;
+      if (grossMonthly <= 45900000) return 0.09;
+      return 0.10;
     }
   }
 
-  function hitungTarifTER(kategori, bruto) {
-    // Matriks pendekatan ringkas esensial PP 58/2023
-    if (kategori === 'A') {
-      if (bruto <= 2500000) return 0;
-      if (bruto <= 3000000) return 0.0025;
-      if (bruto <= 3600000) return 0.005;
-      if (bruto <= 4200000) return 0.0075;
-      if (bruto <= 4800000) return 0.01;
-      if (bruto <= 5400000) return 0.0125;
-      if (bruto <= 6000000) return 0.015;
-      if (bruto <= 6700000) return 0.0175;
-      if (bruto <= 7500000) return 0.02;
-      if (bruto <= 8500000) return 0.03;
-      if (bruto <= 9500000) return 0.04;
-      if (bruto <= 10500000) return 0.05;
-      if (bruto <= 12500000) return 0.06;
-      if (bruto <= 15100000) return 0.07;
-      if (bruto <= 17500000) return 0.08;
-      if (bruto <= 19700000) return 0.09;
-      if (bruto <= 24100000) return 0.10;
-      if (bruto <= 26500000) return 0.11;
-      if (bruto <= 34100000) return 0.12;
-      return 0.15;
-    } else if (kategori === 'B') {
-      if (bruto <= 3200000) return 0;
-      if (bruto <= 3800000) return 0.0025;
-      if (bruto <= 4500000) return 0.005;
-      if (bruto <= 5100000) return 0.0075;
-      if (bruto <= 5700000) return 0.01;
-      if (bruto <= 6300000) return 0.0125;
-      if (bruto <= 7000000) return 0.015;
-      if (bruto <= 7800000) return 0.0175;
-      if (bruto <= 8700000) return 0.02;
-      if (bruto <= 9700000) return 0.03;
-      if (bruto <= 10800000) return 0.04;
-      if (bruto <= 12300000) return 0.05;
-      if (bruto <= 14800000) return 0.06;
-      if (bruto <= 17200000) return 0.07;
-      if (bruto <= 19500000) return 0.08;
-      if (bruto <= 22700000) return 0.09;
-      if (bruto <= 26600000) return 0.10;
-      return 0.12;
-    } else { // Kategori C
-      if (bruto <= 5400000) return 0;
-      if (bruto <= 6000000) return 0.0025;
-      if (bruto <= 6700000) return 0.005;
-      if (bruto <= 7400000) return 0.0075;
-      if (bruto <= 8200000) return 0.01;
-      if (bruto <= 9200000) return 0.0125;
-      if (bruto <= 10200000) return 0.015;
-      if (bruto <= 11200000) return 0.0175;
-      if (bruto <= 12300000) return 0.02;
-      if (bruto <= 14100000) return 0.03;
-      if (bruto <= 16100000) return 0.04;
-      if (bruto <= 18100000) return 0.05;
-      return 0.07;
-    }
-  }
-
-  function hitungPajakProgresifPasal17(pkp) {
+  function hitungProgresifPasal17(pkp) {
     if (pkp <= 0) return 0;
-    let pajak = 0;
-    let sisa = pkp;
-    
-    const tarifLapis = [
-      { batas: 60000000, rate: 0.05 },
-      { batas: 250000000, rate: 0.15 },
-      { batas: 500000000, rate: 0.25 },
-      { batas: 5000000000, rate: 0.30 },
-      { batas: Infinity, rate: 0.35 }
+    let tax = 0;
+    let layers = [
+      { limit: 60000000, rate: 0.05 },
+      { limit: 250000000, rate: 0.15 },
+      { limit: 500000000, rate: 0.25 },
+      { limit: 5000000000, rate: 0.30 },
+      { limit: Infinity, rate: 0.35 }
     ];
-
-    let batasSebelumnya = 0;
-    for (let i = 0; i < tarifLapis.length; i++) {
-      let range = tarifLapis[i].batas - batasSebelumnya;
-      if (sisa > range) {
-        pajak += range * tarifLapis[i].rate;
-        sisa -= range;
-        batasSebelumnya = tarifLapis[i].batas;
+    let previousLimit = 0;
+    for (let layer of layers) {
+      let currentRange = layer.limit - previousLimit;
+      if (pkp > currentRange) {
+        tax += currentRange * layer.rate;
+        pkp -= currentRange;
+        previousLimit = layer.limit;
       } else {
-        pajak += sisa * tarifLapis[i].rate;
+        tax += pkp * layer.rate;
         break;
       }
     }
-    return pajak;
+    return tax;
   }
 
-  // --- KENDALI LOGIKA TAB GAJI ---
-  const gGaji = document.getElementById('g_gaji');
-  const gThr = document.getElementById('g_thr');
-  const gJkk = document.getElementById('g_jkk');
-  let gSelectedStatus = 'lajang';
-  let gSelectedDep = 0;
-  let gBpjsActive = true;
+  // --- Engine Perhitungan per Modul ---
+  
+  function calcGaji() {
+    let gaji = parseMoney(document.getElementById('g_gaji').value);
+    let status = document.getElementById('g_status').querySelector('.on').getAttribute('data-v');
+    let dep = parseInt(document.getElementById('g_dep').querySelector('.on').getAttribute('data-v'));
+    let bpjsOn = document.getElementById('g_bpjs').classList.contains('on');
+    let thr = parseMoney(document.getElementById('g_thr').value);
+    let jkkRate = parseFloat(document.getElementById('g_jkk').value);
 
-  // Event handler segment & chips button
-  document.querySelectorAll('#g_status button').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('#g_status button').forEach(x => x.classList.remove('on'));
-      b.classList.add('on');
-      gSelectedStatus = b.getAttribute('data-v');
-      kalkulasiGaji();
-    });
-  });
-  document.querySelectorAll('#g_dep button').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('#g_dep button').forEach(x => x.classList.remove('on'));
-      b.classList.add('on');
-      gSelectedDep = parseInt(b.getAttribute('data-v'));
-      kalkulasiGaji();
-    });
-  });
-  document.getElementById('g_bpjs').addEventListener('click', function() {
-    this.classList.toggle('on');
-    gBpjsActive = this.classList.contains('on');
-    kalkulasiGaji();
-  });
+    // Asumsi BPJS Cap 2026
+    let capKesehatan = 12000000;
+    let capKetenagakerjaan = 11000000;
 
-  autoFormatInput(gGaji, kalkulasiGaji);
-  autoFormatInput(gThr, kalkulasiGaji);
-  gJkk.addEventListener('change', kalkulasiGaji);
-
-  function kalkulasiGaji() {
-    const gaji = parseMoney(gGaji.value);
-    const thr = parseMoney(gThr.value);
-    const riskRate = parseFloat(gJkk.value);
-
-    // Hitung Komponen BPJS Mandate
-    let bpjsKesTK = 0, bpjsJHTTK = 0, bpjsJPTK = 0;
-    let bpjsKesPerusahaan = 0, jkkPerusahaan = 0, jkmPerusahaan = 0;
-
-    if (gBpjsActive) {
-      // Batas Atas Upah Maks BPJS Kesehatan 2026
-      const upahMaksKes = 12000000;
-      const basisUpahKes = Math.min(gaji, upahMaksKes);
-      bpjsKesTK = basisUpahKes * 0.01;
-      bpjsKesPerusahaan = basisUpahKes * 0.04;
-
-      // Ketenagakerjaan
-      bpjsJHTTK = gaji * 0.02;
-      // Batas Upah JP Pensiun 2026 Angka Asumsi Penyesuaian Berjalan
-      const upahMaksJP = 10500000; 
-      bpjsJPTK = Math.min(gaji, upahMaksJP) * 0.01;
-
-      jkkPerusahaan = gaji * riskRate;
-      jkmPerusahaan = gaji * 0.003;
+    let bpjsKaryawan = 0;
+    if (bpjsOn) {
+      let bpjsKes = Math.min(gaji, capKesehatan) * 0.01; // 1% pekerja
+      let jht = gaji * 0.02; // 2% JHT
+      let jp = Math.min(gaji, capKetenagakerjaan) * 0.01; // 1% JP
+      bpjsKaryawan = bpjsKes + jht + jp;
     }
 
-    const totalBpjsDipotongKaryawan = bpjsKesTK + bpjsJHTTK + bpjsJPTK;
+    // TER dipengaruhi total penghasilan bruto bulan bersangkutan
+    let jkkPerusahaan = gaji * jkkRate;
+    let grossMonthly = gaji + jkkPerusahaan; 
     
-    // Penghasilan Bruto Bulanan (Sesuai Aturan TER, JKK & JKM Perusahaan menambah bruto)
-    const brutoBulananUntukTER = gaji + jkkPerusahaan + jkmPerusahaan + bpjsKesPerusahaan;
+    let ptkpCat = getPTKPCategory(status, dep);
+    let terCat = getTERCategory(ptkpCat);
+    let rate = getTERRate(terCat, grossMonthly);
+    let pajak = grossMonthly * rate;
 
-    // Kalkulasi Pajak via TER (Jan-Nov)
-    const kategori = dapatkanKategoriTER(gSelectedStatus, gSelectedDep);
-    const rateTER = hitungTarifTER(kategori, brutoBulananUntukTER);
-    const pphTERBulanan = brutoBulananUntukTER * rateTER;
+    let net = gaji - bpjsKaryawan - pajak;
+    if (net < 0) net = 0;
 
-    // Output Hasil Sisi Kanan Atas
-    const gajiBersihDiterima = gaji - totalBpjsDipotongKaryawan - pphTERBulanan;
-    document.getElementById('g_net').innerText = formatMoney(gajiBersihDiterima);
+    // Render Dom
+    document.getElementById('g_net').innerText = formatMoney(net);
+    document.getElementById('g_l_net').innerText = formatMoney(net);
+    document.getElementById('g_l_bpjs').innerText = formatMoney(bpjsKaryawan);
+    document.getElementById('g_l_tax').innerText = formatMoney(pajak);
     document.getElementById('g_gross').innerText = formatMoney(gaji);
-    document.getElementById('g_tax').innerText = formatMoney(pphTERBulanan);
+    document.getElementById('g_tax').innerText = formatMoney(pajak);
 
-    document.getElementById('g_l_net').innerText = formatMoney(gajiBersihDiterima);
-    document.getElementById('g_l_bpjs').innerText = formatMoney(totalBpjsDipotongKaryawan);
-    document.getElementById('g_l_tax').innerText = formatMoney(pphTERBulanan);
-
-    // Lebar Progress Bar Visualizer
-    const totKomponen = gajiBersihDiterima + totalBpjsDipotongKaryawan + pphTERBulanan;
-    if(totKomponen > 0) {
-      document.getElementById('g_b1').style.width = (gajiBersihDiterima / totKomponen * 100) + "%";
-      document.getElementById('g_b2').style.width = (totalBpjsDipotongKaryawan / totKomponen * 100) + "%";
-      document.getElementById('g_b3').style.width = (pphTERBulanan / totKomponen * 100) + "%";
+    // Graphic distribution bar
+    let tot = net + bpjsKaryawan + pajak;
+    if (tot > 0) {
+      document.getElementById('g_b1').style.width = (net / tot * 100) + "%";
+      document.getElementById('g_b2').style.width = (bpjsKaryawan / tot * 100) + "%";
+      document.getElementById('g_b3').style.width = (pajak / tot * 100) + "%";
     }
 
-    // --- POPULASI DATA LEDGER DETAILED ---
-    document.getElementById('g_l_cat').innerText = 'Kategori ' + kategori + ' (Status ' + gSelectedStatus.toUpperCase() + '/' + gSelectedDep + ')';
-    document.getElementById('g_l_ter_rate').innerText = (rateTER * 100).toFixed(2) + '%';
-    document.getElementById('g_l_ter_tax').innerText = formatMoney(pphTERBulanan);
-
-    // Kalkulasi Tahunan Akhir Masa Pajak Desember
-    const brutoSetahun = (brutoBulananUntukTER * 12) + thr;
-    const biayaJabatan = Math.min(brutoSetahun * 0.05, 6000000);
-    const iuranPensiunSetahun = (bpjsJHTTK + bpjsJPTK) * 12;
-    const nettoSetahun = brutoSetahun - biayaJabatan - iuranPensiunSetahun;
-
-    // Ambil Nilai PTKP Acuan Resmi
-    let basisPTKP = 54000000;
-    if (gSelectedStatus === 'menikah') basisPTKP += 4500000;
-    basisPTKP += (gSelectedDep * 4500000);
-
-    const pkpSetahun = Math.max(0, nettoSetahun - basisPTKP);
-    const pphTerutangSetahun = hitungPajakProgresifPasal17(pkpSetahun);
-    const pphTelahDibayarJanNov = pphTERBulanan * 11;
-    const pphDesember = Math.max(0, pphTerutangSetahun - pphTelahDibayarJanNov);
-
-    document.getElementById('g_l_yr_gross').innerText = formatMoney(brutoSetahun);
-    document.getElementById('g_l_yr_bj').innerText = formatMoney(biayaJabatan);
-    document.getElementById('g_l_yr_bpjs').innerText = formatMoney(iuranPensiunSetahun);
-    document.getElementById('g_l_yr_net').innerText = formatMoney(nettoSetahun);
-    document.getElementById('g_l_yr_ptkp').innerText = formatMoney(basisPTKP);
-    document.getElementById('g_l_yr_pkp').innerText = formatMoney(pkpSetahun);
-    document.getElementById('g_l_yr_tax_total').innerText = formatMoney(pphTerutangSetahun);
-    document.getElementById('g_l_yr_tax_paid').innerText = formatMoney(pphTelahDibayarJanNov);
-    document.getElementById('g_l_dec_tax').innerText = formatMoney(pphDesember);
+    document.getElementById('g_det_text').innerHTML = `
+      Kategori PTKP: <b>${ptkpCat}</b> (TER Kelompok <b>${terCat}</b>)<br>
+      Tarif TER: <b>${(rate * 100).toFixed(2)}%</b> diterapkan pada bruto reguler.<br>
+      <small>*Premi jaminan perusahaan (${formatMoney(jkkPerusahaan)}) ikut menambah basis pajak bruto.</small>
+    `;
   }
 
-  // --- KENDALI LOGIKA TAB KERJA LEPAS ---
-  const lBruto = document.getElementById('l_bruto');
-  const lJenis = document.getElementById('l_jenis');
-  const lPtkp = document.getElementById('l_ptkp');
+  function calcLepas() {
+    let bruto = parseMoney(document.getElementById('l_bruto').value);
+    let metode = document.getElementById('v-lepas').querySelector('.opt.on').getAttribute('data-v');
+    let npwp = document.getElementById('l_npwp').classList.contains('on');
 
-  autoFormatInput(lBruto, kalkulasiLepas);
-  lJenis.addEventListener('change', kalkulasiLepas);
-  lPtkp.addEventListener('change', kalkulasiLepas);
-
-  function kalkulasiLepas() {
-    const bruto = parseMoney(lBruto.value);
-    const dpp = bruto * 0.5; // Norma pemotongan umum 50%
-    
-    // Gunakan pendekatan TER bulanan berkesinambungan
-    const pphDipotong = dpp * 0.05; // Menggunakan simulasi lapis dasar minimal awal
-
-    document.getElementById('l_tax_display').innerText = formatMoney(pphDipotong);
-    document.getElementById('l_dpp').innerText = formatMoney(dpp);
-    document.getElementById('l_netto').innerText = formatMoney(bruto - pphDipotong);
-  }
-
-  // --- KENDALI LOGIKA TAB USAHA KECIL (UMKM) ---
-  const uOmzet = document.getElementById('u_omzet');
-  const uPrev = document.getElementById('u_prev');
-
-  autoFormatInput(uOmzet, kalkulasiUsaha);
-  autoFormatInput(uPrev, kalkulasiUsaha);
-
-  function kalkulasiUsaha() {
-    const omzetBulanIni = parseMoney(uOmzet.value);
-    const omzetLalu = parseMoney(uPrev.value);
-    const totalOmzet = omzetBulanIni + omzetLalu;
-    
-    const tresholdBebas = 500000000;
-    let omzetKenaPajak = 0;
-
-    if (totalOmzet > tresholdBebas) {
-      if (omzetLalu >= tresholdBebas) {
-        omzetKenaPajak = omzetBulanIni;
-      } else {
-        omzetKenaPajak = totalOmzet - tresholdBebas;
-      }
-    }
-
-    const pphFinal = omzetKenaPajak * 0.005;
-
-    document.getElementById('u_tot_omzet').innerText = formatMoney(totalOmzet);
-    document.getElementById('u_free_zone').innerText = formatMoney(Math.min(totalOmzet, tresholdBebas));
-    document.getElementById('u_taxable_zone').innerText = formatMoney(omzetKenaPajak);
-    document.getElementById('u_final_tax').innerText = formatMoney(pphFinal);
-  }
-
-  // --- KENDALI LOGIKA TAB PPN ---
-  const pHarga = document.getElementById('p_harga');
-  let pTipeHarga = 'belum';
-
-  autoFormatInput(pHarga, kalkulasiPPN);
-  document.querySelectorAll('#p_tipe button').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('#p_tipe button').forEach(x => x.classList.remove('on'));
-      b.classList.add('on');
-      pTipeHarga = b.getAttribute('data-v');
-      kalkulasiPPN();
-    });
-  });
-
-  function kalkulasiPPN() {
-    const inputNominal = parseMoney(pHarga.value);
     let dpp = 0;
-    let nilaiPpn = 0;
-    let totalHarga = 0;
+    let pajak = 0;
+    let rateStr = "Progresif Psl 17";
 
-    if (pTipeHarga === 'belum') {
-      dpp = inputNominal;
-      nilaiPpn = dpp * 0.12; // Tarif PPN 12% Per Maret/Tahun Berjalan 2026
-      totalHarga = dpp + nilaiPpn;
+    if (metode === 'bukan-pegawai') {
+      dpp = bruto * 0.5; // DPP 50%
+      pajak = hitungProgresifPasal17(dpp);
+      if (!npwp) {
+        pajak = pajak * 1.2; // Denda 20% tanpa NPWP
+        rateStr = "Progresif + Denda 20%";
+      }
     } else {
-      dpp = inputNominal / 1.12;
-      nilaiPpn = inputNominal - dpp;
-      totalHarga = inputNominal;
+      // Skema NPPN sederhana (asumsi norma neto umum 50%)
+      dpp = bruto * 0.5;
+      pajak = hitungProgresifPasal17(dpp);
     }
 
-    document.getElementById('p_dpp').innerText = formatMoney(dpp);
-    document.getElementById('p_value').innerText = formatMoney(nilaiPpn);
-    document.getElementById('p_total').innerText = formatMoney(totalHarga);
+    let net = bruto - pajak;
+    document.getElementById('l_net').innerText = formatMoney(net);
+    document.getElementById('l_tax_val').innerText = formatMoney(pajak);
+    document.getElementById('l_dpp').innerText = formatMoney(dpp);
+    document.getElementById('l_rate').innerText = rateStr;
   }
 
-  // --- KENDALI LOGIKA TAB SPT TAHUNAN ---
-  const sNetto = document.getElementById('s_netto');
-  const sPtkp = document.getElementById('s_ptkp');
-  const sKredit = document.getElementById('s_kredit');
+  function calcUsaha() {
+    let omzet = parseMoney(document.getElementById('u_omzet').value);
+    let kumulatif = parseMoney(document.getElementById('u_kumulatif').value);
+    let badan = document.getElementById('u_badan').querySelector('.on').getAttribute('data-v');
 
-  autoFormatInput(sNetto, kalkulasiSPT);
-  autoFormatInput(sKredit, kalkulasiSPT);
-  sPtkp.addEventListener('change', kalkulasiSPT);
+    let tax = 0;
+    let batasBebas = 500000000;
+    let sisaKuota = 0;
 
-  function kalkulasiSPT() {
-    const netto = parseMoney(sNetto.value);
-    const ptkp = parseFloat(sPtkp.value);
-    const kredit = parseMoney(sKredit.value);
+    if (badan === 'pribadi') {
+      if (kumulatif >= batasBebas) {
+        tax = omzet * 0.005;
+      } else {
+        let gap = batasBebas - kumulatif;
+        if (omzet > gap) {
+          tax = (omzet - gap) * 0.005;
+          sisaKuota = 0;
+        } else {
+          tax = 0;
+          sisaKuota = gap - omzet;
+        }
+      }
+    } else {
+      // Badan komersial UMKM langsung kena PPh final tanpa kuota bebas
+      tax = omzet * 0.005;
+    }
 
-    const pkp = Math.max(0, netto - ptkp);
-    const terutang = hitungPajakProgresifPasal17(pkp);
-    const selisih = terutang - kredit;
+    let net = omzet - tax;
+    document.getElementById('u_tax').innerText = formatMoney(tax);
+    document.getElementById('u_kuota').innerText = badan === 'pribadi' ? formatMoney(sisaKuota) : 'Rp 0 (Badan)';
+    document.getElementById('u_net').innerText = formatMoney(net);
+  }
 
-    const bigStatus = document.getElementById('s_status_big');
-    const badge = document.getElementById('s_verdict_badge');
-    const note = document.getElementById('s_note');
-    const card = document.getElementById('s_card_color');
+  function calcPPN() {
+    let harga = parseMoney(document.getElementById('p_harga').value);
+    let jenis = document.getElementById('p_jenis').querySelector('.on').getAttribute('data-v');
+    let tarifPct = parseFloat(document.getElementById('p_tarif').querySelector('.on').getAttribute('data-v')) / 100;
 
+    let dpp = 0;
+    let ppn = 0;
+    let total = 0;
+
+    if (jenis === 'belum') {
+      dpp = harga;
+      ppn = dpp * tarifPct;
+      total = dpp + ppn;
+    } else {
+      dpp = harga / (1 + tarifPct);
+      ppn = harga - dpp;
+      total = harga;
+    }
+
+    document.getElementById('p_dasar').innerText = formatMoney(dpp);
+    document.getElementById('p_pajak').innerText = formatMoney(ppn);
+    document.getElementById('p_total').innerText = formatMoney(total);
+  }
+
+  function calcSPT() {
+    let neto = parseMoney(document.getElementById('s_neto').value);
+    let ptkp = parseFloat(document.getElementById('s_ptkp').value);
+    let kredit = parseMoney(document.getElementById('s_kredit').value);
+
+    let pkp = neto - ptkp;
+    if (pkp < 0) pkp = 0;
+
+    let terutang = hitungProgresifPasal17(pkp);
+    let selisih = terutang - kredit;
+
+    let badge = document.getElementById('s_badge');
+    document.getElementById('s_pkp').innerText = formatMoney(pkp);
     document.getElementById('s_terutang').innerText = formatMoney(terutang);
-    document.getElementById('s_selisih').innerText = formatMoney(Math.abs(selisih));
 
-    if (selisih > 1000) {
-      bigStatus.innerText = "KURANG BAYAR";
-      card.style.background = "linear-gradient(158deg, var(--red) 0%, #6e1c10 100%)";
+    if (selisih > 0) {
       badge.className = "verdict kb";
-      badge.innerText = "⚠️ Harus Dilunasi";
-      note.innerHTML = `Anda diwajibkan menyetor sisa pajak sebesar <b>${formatMoney(selisih)}</b> melalui pembuatan kode biling CoreTax sebelum pelaporan SPT ditutup.`;
-    } else if (selisih < -1000) {
-      bigStatus.innerText = "LEBIH BAYAR";
-      card.style.background = "linear-gradient(158deg, var(--gold) 0%, #855314 100%)";
+      badge.innerText = "Kurang Bayar (PPh Pasal 29)";
+      document.getElementById('s_verdict_val').innerText = formatMoney(selisih);
+    } else if (selisih < 0) {
       badge.className = "verdict lb";
-      badge.innerText = "🔎 Potensi Restitusi";
-      note.innerHTML = `Terdapat kelebihan bayar sebesar <b>${formatMoney(Math.abs(selisih))}</b>. Angka ini dapat diajukan untuk restitusi pengembalian atau diringankan via KPP.`;
+      badge.innerText = "Lebih Bayar (Restitusi)";
+      document.getElementById('s_verdict_val').innerText = formatMoney(Math.abs(selisih));
     } else {
-      bigStatus.innerText = "NIHIL";
-      card.style.background = "linear-gradient(158deg, var(--green) 0%, var(--green-deep) 100%)";
       badge.className = "verdict nihil";
-      badge.innerText = "✓ Terhitung Akurat";
-      note.innerText = "Kondisi ideal. Struktur perpajakan Anda telah dipotong secara presisi dan nihil dari beban tunggakan tambahan.";
+      badge.innerText = "Nihil (Pas/Sempurna)";
+      document.getElementById('s_verdict_val').innerText = "Rp 0";
     }
   }
 
-  // --- WORKSPACE PRO & HR OPERATIONS (ROSTER MANAGEMENT) ---
-  let dataKaryawan = [
-    { id: 1, nama: "Ahmad Subarjo", gross: 8500000, status: "lajang", dep: 0, bpjs: "on" },
-    { id: 2, nama: "Siti Rahmaawati", gross: 12000000, status: "menikah", dep: 2, bpjs: "on" }
-  ];
-
-  const tbody = document.getElementById('p_tbody');
-
+  // --- HR Roster Management ---
   function renderRoster() {
-    tbody.innerHTML = "";
-    if(dataKaryawan.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" class="empty">Tidak ada data karyawan. Silakan tambah data baru atau impor dari file excel.</td></tr>`;
-      hitungTotalRoster();
+    let tbody = document.getElementById('roster_body');
+    tbody.innerHTML = '';
+    
+    let tGross = 0, tTax = 0, tBpjs = 0, tNet = 0;
+
+    if(rosterData.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="empty">Belum ada data karyawan. Tambahkan baris baru.</td></tr>`;
       return;
     }
 
-    dataKaryawan.forEach((k, index) => {
-      // Jalankan Kalkulator Perpajakan Realtime Per Pegawai
-      const basisUpahKes = Math.min(k.gross, 12000000);
-      const bpjsKesPerusahaan = k.bpjs === 'on' ? basisUpahKes * 0.04 : 0;
-      const jkkPerusahaan = k.bpjs === 'on' ? k.gross * 0.0024 : 0;
-      const jkmPerusahaan = k.bpjs === 'on' ? k.gross * 0.003 : 0;
-      
-      const brutoTER = k.gross + bpjsKesPerusahaan + jkkPerusahaan + jkmPerusahaan;
-      const kategori = dapatkanKategoriTER(k.status, k.dep);
-      const rateTER = hitungTarifTER(kategori, brutoTER);
-      const taxValue = brutoTER * rateTER;
+    rosterData.forEach((emp, index) => {
+      let ptkpCat = getPTKPCategory(emp.status, emp.dep);
+      let terCat = getTERCategory(ptkpCat);
+      let rate = getTERRate(terCat, emp.gaji);
+      let tax = emp.gaji * rate;
+      let bpjs = emp.gaji * 0.04; // Sederhana flat 4% total
+      let net = emp.gaji - tax - bpjs;
 
-      const tr = document.createElement('tr');
+      tGross += emp.gaji; tTax += tax; tBpjs += bpjs; tNet += net;
+
+      let tr = document.createElement('tr');
       tr.innerHTML = `
-        <td style="text-align:center">${index + 1}</td>
-        <td><input type="text" class="ri" value="${k.nama}" data-id="${k.id}" data-field="nama"></td>
-        <td class="c"><input type="text" class="ri rc" value="${k.gross.toLocaleString('id-ID')}" data-id="${k.id}" data-field="gross"></td>
+        <td><input type="text" class="ri" value="${emp.nama}" data-field="nama" data-idx="${index}"></td>
+        <td><input type="text" class="ri rc" value="${emp.gaji.toLocaleString('id-ID')}" data-field="gaji" data-idx="${index}"></td>
         <td>
-          <select class="ri rs" data-id="${k.id}" data-field="status">
-            <option value="lajang" ${k.status === 'lajang' ? 'selected' : ''}>Lajang</option>
-            <option value="menikah" ${k.status === 'menikah' ? 'selected' : ''}>Menikah</option>
+          <select class="ri rs" data-field="status" data-idx="${index}">
+            <option value="lajang" ${emp.status==='lajang'?'selected':''}>Lajang</option>
+            <option value="menikah" ${emp.status==='menikah'?'selected':''}>Menikah</option>
           </select>
         </td>
         <td>
-          <select class="ri rs" data-id="${k.id}" data-field="dep">
-            <option value="0" ${k.dep === 0 ? 'selected' : ''}>0</option>
-            <option value="1" ${k.dep === 1 ? 'selected' : ''}>1</option>
-            <option value="2" ${k.dep === 2 ? 'selected' : ''}>2</option>
-            <option value="3" ${k.dep === 3 ? 'selected' : ''}>3</option>
+          <select class="ri rs" data-field="dep" data-idx="${index}">
+            <option value="0" ${emp.dep===0?'selected':''}>0</option>
+            <option value="1" ${emp.dep===1?'selected':''}>1</option>
+            <option value="2" ${emp.dep===2?'selected':''}>2</option>
+            <option value="3" ${emp.dep===3?'selected':''}>3</option>
           </select>
         </td>
-        <td>
-          <select class="ri rs" data-id="${k.id}" data-field="bpjs">
-            <option value="on" ${k.bpjs === 'on' ? 'selected' : ''}>Ya (Aktif)</option>
-            <option value="off" ${k.bpjs === 'off' ? 'selected' : ''}>Tidak</option>
-          </select>
-        </td>
-        <td class="c" style="font-weight:600; padding-right:14px">${formatMoney(taxValue)}</td>
-        <td style="text-align:center"><button class="del" data-id="${k.id}">✕</button></td>
+        <td class="c cat">${formatMoney(tax)}</td>
+        <td class="c">${formatMoney(bpjs)}</td>
+        <td class="c" style="font-weight:600">${formatMoney(net)}</td>
+        <td><button class="del" data-idx="${index}">✕</button></td>
       `;
       tbody.appendChild(tr);
     });
 
-    attachRosterEvents();
-    hitungTotalRoster();
-  }
+    document.getElementById('f_gross').innerText = formatMoney(tGross);
+    document.getElementById('f_tax').innerText = formatMoney(tTax);
+    document.getElementById('f_bpjs').innerText = formatMoney(tBpjs);
+    document.getElementById('f_net').innerText = formatMoney(tNet);
 
-  function attachRosterEvents() {
-    // Input String & Angka Listener
-    document.querySelectorAll('#p_tbody input, #p_tbody select').forEach(element => {
-      element.addEventListener('change', (e) => {
-        const id = parseInt(e.target.getAttribute('data-id'));
-        const field = e.target.getAttribute('data-field');
+    // Bind event inputs inside table
+    tbody.querySelectorAll('.ri').forEach(el => {
+      el.addEventListener('change', (e) => {
+        let idx = parseInt(e.target.getAttribute('data-idx'));
+        let field = e.target.getAttribute('data-field');
         let val = e.target.value;
-
-        const item = dataKaryawan.find(x => x.id === id);
-        if(!item) return;
-
-        if (field === 'gross') {
-          val = parseMoney(val);
-          e.target.value = val.toLocaleString('id-ID');
-        } else if (field === 'dep') {
-          val = parseInt(val);
-        }
-        
-        item[field] = val;
+        if(field === 'gaji') val = parseMoney(val);
+        if(field === 'dep') val = parseInt(val);
+        rosterData[idx][field] = val;
         renderRoster();
       });
     });
 
-    // Tombol Hapus Baris Pegawai
-    document.querySelectorAll('#p_tbody .del').forEach(btn => {
+    tbody.querySelectorAll('.del').forEach(el => {
+      el.addEventListener('click', (e) => {
+        let idx = parseInt(e.target.getAttribute('data-idx'));
+        rosterData.splice(idx, 1);
+        renderRoster();
+      });
+    });
+  }
+
+  // --- Routing View Control ---
+  function switchView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    let target = document.getElementById('v-' + viewId);
+    if(target) {
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+      // Run calculations dynamically upon entry
+      if(viewId === 'gaji') calcGaji();
+      if(viewId === 'lepas') calcLepas();
+      if(viewId === 'usaha') calcUsaha();
+      if(viewId === 'ppn') calcPPN();
+      if(viewId === 'tahunan') calcSPT();
+      if(viewId === 'pro') renderRoster();
+    }
+  }
+
+  // --- Interaktivitas DOM Global & Event Binding ---
+  document.addEventListener("DOMContentLoaded", () => {
+    
+    // Theme switching
+    document.getElementById('t_theme').addEventListener('click', () => {
+      isDarkMode = !isDarkMode;
+      document.body.classList.toggle('dark', isDarkMode);
+    });
+
+    // Print
+    document.getElementById('t_print').addEventListener('click', () => window.print());
+
+    // Routing click triggers
+    document.querySelectorAll('[data-go]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = parseInt(btn.getAttribute('data-id'));
-        dataKaryawan = dataKaryawan.filter(x => x.id !== id);
-        renderRoster();
+        switchView(btn.getAttribute('data-go'));
       });
     });
-  }
 
-  function hitungTotalRoster() {
-    let totGross = 0;
-    let totTax = 0;
-
-    dataKaryawan.forEach(k => {
-      const basisUpahKes = Math.min(k.gross, 12000000);
-      const bpjsKesPerusahaan = k.bpjs === 'on' ? basisUpahKes * 0.04 : 0;
-      const jkkPerusahaan = k.bpjs === 'on' ? k.gross * 0.0024 : 0;
-      const jkmPerusahaan = k.bpjs === 'on' ? k.gross * 0.003 : 0;
-      const brutoTER = k.gross + bpjsKesPerusahaan + jkkPerusahaan + jkmPerusahaan;
-
-      const rate = hitungTarifTER(dapatkanKategoriTER(k.status, k.dep), brutoTER);
-      totGross += k.gross;
-      totTax += (brutoTER * rate);
+    // --- Module Gaji Handlers ---
+    setupAutoMoneyFormat(document.getElementById('g_gaji'), calcGaji);
+    setupAutoMoneyFormat(document.getElementById('g_thr'), calcGaji);
+    
+    document.getElementById('g_status').querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.getElementById('g_status').querySelectorAll('button').forEach(b => b.classList.remove('on'));
+        e.target.classList.add('on');
+        calcGaji();
+      });
     });
 
-    document.getElementById('f_gross').innerText = formatMoney(totGross);
-    document.getElementById('f_tax').innerText = formatMoney(totTax);
-  }
+    document.getElementById('g_dep').querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.getElementById('g_dep').querySelectorAll('button').forEach(b => b.classList.remove('on'));
+        e.target.classList.add('on');
+        calcGaji();
+      });
+    });
 
-  // Aksi Tombol Tambah Karyawan Baru
-  document.getElementById('p_add_row').addEventListener('click', () => {
-    const newId = dataKaryawan.length > 0 ? Math.max(...dataKaryawan.map(o => o.id)) + 1 : 1;
-    dataKaryawan.push({ id: newId, nama: "Karyawan Baru", gross: 5000000, status: "lajang", dep: 0, bpjs: "on" });
-    renderRoster();
-  });
+    document.getElementById('g_bpjs').addEventListener('click', (e) => {
+      e.currentTarget.classList.toggle('on');
+      calcGaji();
+    });
 
-  // --- FITUR INTEGRASI EXCEL (XLSX LIBRARY) ---
-  const fileInput = document.getElementById('p_file_input');
-  document.getElementById('p_import_btn').addEventListener('click', () => fileInput.click());
+    document.getElementById('g_jkk').addEventListener('change', calcGaji);
 
-  fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, {type: 'array'});
-        const sheetName = workbook.SheetNames[0];
-        const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-        
-        dataKaryawan = rows.map((r, i) => ({
-          id: i + 1,
-          nama: r['Nama Karyawan'] || r['Nama'] || 'Tanpa Nama',
-          gross: parseFloat(r['Gaji Kotor'] || r['Gaji'] || 0),
-          status: String(r['Status'] || 'lajang').toLowerCase().includes('menikah') ? 'menikah' : 'lajang',
-          dep: parseInt(r['Tanggungan'] || r['Anak'] || 0),
-          bpjs: String(r['BPJS'] || 'Ya').toLowerCase().includes('tidak') ? 'off' : 'on'
-        }));
-        renderRoster();
-      } catch(err) {
-        alert('Gagal memproses berkas Excel, pastikan struktur kolom sesuai.');
-      }
-    };
-    reader.readAsArrayBuffer(file);
-  });
+    // Collapsibles logic
+    document.getElementById('g_adv_btn').addEventListener('click', (e) => {
+      e.currentTarget.classList.toggle('open');
+      document.getElementById('g_adv').classList.toggle('open');
+    });
+    document.getElementById('g_det_btn').addEventListener('click', (e) => {
+      e.currentTarget.classList.toggle('open');
+      document.getElementById('g_det').classList.toggle('open');
+    });
 
-  document.getElementById('p_export_btn').addEventListener('click', () => {
-    const exportData = dataKaryawan.map(k => {
-      const basisUpahKes = Math.min(k.gross, 12000000);
-      const bpjsKesPerusahaan = k.bpjs === 'on' ? basisUpahKes * 0.04 : 0;
-      const jkkPerusahaan = k.bpjs === 'on' ? k.gross * 0.0024 : 0;
-      const jkmPerusahaan = k.bpjs === 'on' ? k.gross * 0.003 : 0;
-      const brutoTER = k.gross + bpjsKesPerusahaan + jkkPerusahaan + jkmPerusahaan;
-      const tax = brutoTER * hitungTarifTER(dapatkanKategoriTER(k.status, k.dep), brutoTER);
-      
-      return {
-        'Nama Karyawan': k.nama,
-        'Gaji Kotor (Masa)': k.gross,
-        'Status Pernikahan': k.status,
-        'Jumlah Tanggungan': k.dep,
-        'Status Fasilitas BPJS': k.bpjs === 'on' ? 'Aktif' : 'Tidak Aktif',
-        'Potongan PPh21 TER 2026': Math.round(tax)
+    // --- Module Kerja Lepas Handlers ---
+    setupAutoMoneyFormat(document.getElementById('l_bruto'), calcLepas);
+    document.getElementById('v-lepas').querySelectorAll('.opt').forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        document.getElementById('v-lepas').querySelectorAll('.opt').forEach(o => o.classList.remove('on'));
+        e.currentTarget.classList.add('on');
+        calcLepas();
+      });
+    });
+    document.getElementById('l_npwp').addEventListener('click', (e) => {
+      e.currentTarget.classList.toggle('on');
+      calcLepas();
+    });
+
+    // --- Module Usaha Handlers ---
+    setupAutoMoneyFormat(document.getElementById('u_omzet'), calcUsaha);
+    setupAutoMoneyFormat(document.getElementById('u_kumulatif'), calcUsaha);
+    document.getElementById('u_badan').querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.getElementById('u_badan').querySelectorAll('button').forEach(b => b.classList.remove('on'));
+        e.target.classList.add('on');
+        calcUsaha();
+      });
+    });
+
+    // --- Module PPN Handlers ---
+    setupAutoMoneyFormat(document.getElementById('p_harga'), calcPPN);
+    document.getElementById('p_jenis').querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.getElementById('p_jenis').querySelectorAll('button').forEach(b => b.classList.remove('on'));
+        e.target.classList.add('on');
+        calcPPN();
+      });
+    });
+    document.getElementById('p_tarif').querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.getElementById('p_tarif').querySelectorAll('button').forEach(b => b.classList.remove('on'));
+        e.target.classList.add('on');
+        calcPPN();
+      });
+    });
+
+    // --- Module SPT Handlers ---
+    setupAutoMoneyFormat(document.getElementById('s_neto'), calcSPT);
+    setupAutoMoneyFormat(document.getElementById('s_kredit'), calcSPT);
+    document.getElementById('s_ptkp').addEventListener('change', calcSPT);
+
+    // --- Module Pro Roster Handlers ---
+    document.getElementById('p_add_row').addEventListener('click', () => {
+      rosterData.push({
+        id: Date.now(),
+        nama: 'Karyawan Baru',
+        gaji: 5000000,
+        status: 'lajang',
+        dep: 0
+      });
+      renderRoster();
+    });
+
+    // Integrasi Lembar Kerja Excel menggunakan library xlsx.js yang di-load di head
+    document.getElementById('p_import_btn').addEventListener('click', () => {
+      document.getElementById('p_file').click();
+    });
+
+    document.getElementById('p_file').addEventListener('change', (e) => {
+      let file = e.target.files[0];
+      if(!file) return;
+      let reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          let data = new Uint8Array(evt.target.result);
+          let workbook = XLSX.read(data, {type: 'array'});
+          let sheet = workbook.Sheets[workbook.SheetNames[0]];
+          let rows = XLSX.utils.sheet_to_json(sheet);
+          
+          if(rows.length > 0) {
+            rosterData = rows.map((r, i) => ({
+              id: i,
+              nama: r['Nama Karyawan'] || r['nama'] || 'Nama Inisial',
+              gaji: parseFloat(r['Gaji Bulanan'] || r['gaji']) || 4000000,
+              status: String(r['Status'] || r['status']).toLowerCase().includes('nikah') ? 'menikah' : 'lajang',
+              dep: parseInt(r['Tanggungan'] || r['dep']) || 0
+            }));
+            renderRoster();
+          }
+        } catch(err) {
+          alert('Gagal memproses file Excel. Pastikan format tabel sesuai standar kolom roster.');
+        }
       };
+      reader.readAsArrayBuffer(file);
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Payroll Pajak 2026");
-    XLSX.writeFile(workbook, "Rekap_Pajak_Karyawan_2026.xlsx");
-  });
+    document.getElementById('p_export_btn').addEventListener('click', () => {
+      if(rosterData.length === 0) return alert('Tidak ada data untuk diekspor.');
+      let mapped = rosterData.map(emp => {
+        let pCat = getPTKPCategory(emp.status, emp.dep);
+        let rate = getTERRate(getTERCategory(pCat), emp.gaji);
+        return {
+          'Nama Karyawan': emp.nama,
+          'Gaji Bulanan': emp.gaji,
+          'Status Klasifikasi': pCat,
+          'Potongan Pajak TER': emp.gaji * rate,
+          'Potongan Jaminan BPJS': emp.gaji * 0.04,
+          'Take Home Pay': emp.gaji - (emp.gaji * rate) - (emp.gaji * 0.04)
+        };
+      });
+      let worksheet = XLSX.utils.json_to_sheet(mapped);
+      let workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Roster Pajak 2026");
+      XLSX.writeFile(workbook, "Rekap_Pajak_Karyawan.xlsx");
+    });
 
-  // --- INITIALIZATION TRIGGER ---
-  kalkulasiGaji();
-  kalkulasiLepas();
-  kalkulasiUsaha();
-  kalkulasiPPN();
-  kalkulasiSPT();
-  renderRoster();
+  });
 </script>
 </body>
 </html>
