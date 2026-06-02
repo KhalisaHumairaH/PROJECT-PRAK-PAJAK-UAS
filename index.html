@@ -37,27 +37,97 @@
   #root{max-width:1120px;margin:0 auto;padding:34px 22px 80px;}
 
   /* HOME */
-  .home-head{margin:20px 4px 30px;}
-  .home-head h1{font-family:'Fraunces',serif;font-weight:900;font-size:42px;letter-spacing:-1px;line-height:1.04;}
-  .home-head p{color:var(--muted);font-size:16px;margin-top:10px;max-width:560px;}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .home{position:relative;}
+
+  .hero{
+    position:relative;
+    margin:10px 2px 38px;
+    padding:6px 2px 2px;
+    overflow:visible;
+  }
+  .hero-deco{
+    position:absolute;
+    right:-10px;top:-46px;
+    font-family:'Fraunces',serif;
+    font-weight:900;
+    font-size:230px;
+    line-height:1;
+    color:var(--green);
+    opacity:.06;
+    pointer-events:none;
+    user-select:none;
+  }
+  @media(max-width:680px){.hero-deco{font-size:150px;top:-20px;}}
+  .kicker{
+    display:inline-block;
+    font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--green-2);
+    background:#e7efe8;
+    border:1px solid #d2e2d4;
+    padding:7px 14px;border-radius:30px;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:'Fraunces',serif;font-weight:900;
+    font-size:58px;letter-spacing:-1.6px;line-height:1.0;
+    color:var(--ink);
+    position:relative;
+  }
+  .hero h1 em{font-style:italic;font-weight:500;color:var(--green-2);}
+  @media(max-width:680px){.hero h1{font-size:40px;}}
+  .hero p{color:var(--muted);font-size:16.5px;margin-top:18px;max-width:540px;line-height:1.55;}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;position:relative;z-index:1;}
   @media(max-width:680px){.grid{grid-template-columns:1fr}}
   .tile{
     background:var(--cream-card);
     border:1px solid var(--line);
-    border-radius:18px;
-    padding:26px 26px 30px;
+    border-radius:20px;
+    padding:28px 28px 24px;
     cursor:pointer;
     position:relative;
-    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    overflow:hidden;
+    transition:transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, border-color .2s ease;
     box-shadow:0 1px 0 rgba(0,0,0,.02);
   }
-  .tile:hover{transform:translateY(-3px);box-shadow:0 18px 40px -22px rgba(40,30,10,.35);border-color:#d9cdb6;}
-  .tile .arrow{position:absolute;top:26px;right:26px;color:#b7ac97;font-size:20px;transition:transform .18s ease;}
-  .tile:hover .arrow{transform:translateX(4px);color:var(--green-2);}
-  .tile .emo{font-size:30px;}
-  .tile h3{font-family:'Fraunces',serif;font-weight:700;font-size:25px;margin:16px 0 8px;}
-  .tile p{color:var(--muted);font-size:14.5px;line-height:1.5;max-width:90%;}
+  /* subtle green wash that slides in on hover */
+  .tile::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(22,65,47,.05), transparent 55%);
+    opacity:0;transition:opacity .25s ease;
+  }
+  .tile:hover::before{opacity:1;}
+  .tile:hover{transform:translateY(-4px);box-shadow:0 22px 44px -24px rgba(30,40,20,.4);border-color:#cdbf9f;}
+  .tile .tnum{
+    position:absolute;top:22px;left:28px;
+    font-family:'Fraunces',serif;font-weight:900;font-size:13px;
+    color:#c3b79e;letter-spacing:1px;
+  }
+  .tile .arrow{
+    position:absolute;top:24px;right:26px;
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:#efe7d6;color:#9a8e76;font-size:17px;
+    transition:transform .2s ease, background .2s ease, color .2s ease;
+  }
+  .tile:hover .arrow{transform:translateX(3px);background:var(--green);color:#fff;}
+  .tile .emo{font-size:34px;display:block;margin-top:22px;position:relative;}
+  .tile h3{font-family:'Fraunces',serif;font-weight:700;font-size:24px;margin:14px 0 8px;letter-spacing:-.3px;position:relative;}
+  .tile p{color:var(--muted);font-size:14px;line-height:1.55;position:relative;margin-bottom:16px;}
+  .tile .ttag{
+    display:inline-block;position:relative;
+    font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+    color:var(--green-2);
+    background:#eaf1eb;
+    padding:5px 11px;border-radius:8px;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .hero{animation:rise .5s ease both;}
+  .tile{animation:rise .5s ease both;}
+  .tile:nth-child(1){animation-delay:.06s;}
+  .tile:nth-child(2){animation-delay:.13s;}
+  .tile:nth-child(3){animation-delay:.20s;}
+  .tile:nth-child(4){animation-delay:.27s;}
 
   /* PAGE */
   .back{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;font-size:14px;background:none;border:none;cursor:pointer;margin-bottom:20px;padding:8px 12px;border-radius:10px;}
@@ -241,29 +311,44 @@ function Breakdown({children, openDefault=true}){
 // HOME
 // ========================================================
 const TILES = [
-  {id:"karyawan", emo:"💼", title:"Gaji karyawan", desc:"Cari tahu gaji bersih dan berapa yang dipotong tiap bulan."},
-  {id:"bebas",    emo:"💻", title:"Pekerja bebas", desc:"Honor, komisi, atau bayaran sebagai freelancer & tenaga ahli."},
-  {id:"umkm",     emo:"🏪", title:"Usaha kecil",  desc:"Toko, online shop, atau jasa pribadi dengan omzet di bawah 4,8 M."},
-  {id:"ppn",      emo:"🛍️", title:"PPN sebuah harga", desc:"Hitung pajak (PPN) dari harga barang atau jasa."},
+  {id:"karyawan", emo:"💼", title:"PPh 21 Karyawan",
+   desc:"Simulasi pajak gaji karyawan: bandingkan potongan TER bulanan vs progresif setahun, lengkap dengan rekonsiliasi masa Desember.",
+   tag:"PPh 21 · PP 58/2023"},
+  {id:"bebas",    emo:"💻", title:"Pekerja Bebas",
+   desc:"Honor, komisi, atau bayaran sebagai bukan pegawai — freelancer & tenaga ahli.",
+   tag:"PPh 21 · DPP 50%"},
+  {id:"umkm",     emo:"🏪", title:"Usaha Kecil (UMKM)",
+   desc:"Toko, online shop, atau jasa dengan omzet di bawah Rp 4,8 M. Hitung dari omzet 12 bulan.",
+   tag:"PPh Final · PP 55/2022"},
+  {id:"ppn",      emo:"🛍️", title:"PPN Sebuah Harga",
+   desc:"Hitung Pajak Pertambahan Nilai dari harga barang atau jasa.",
+   tag:"PPN · Tarif 2025"},
 ];
 
 function Home({go}){
   return (
-    <div>
-      <div className="home-head">
-        <h1>Kalkulator Pajak<br/>Indonesia</h1>
-        <p>Hitung pajak penghasilan, UMKM, dan PPN dengan aturan terbaru. Pilih situasi yang paling sesuai dengan kamu.</p>
+    <div className="home">
+      <div className="hero">
+        <div className="hero-deco" aria-hidden="true">%</div>
+        <span className="kicker">Aturan terbaru 2025 · Indonesia</span>
+        <h1>Hitung pajakmu,<br/><em>tanpa pusing.</em></h1>
+        <p>PPh karyawan, pekerja bebas, UMKM, sampai PPN — semua dalam satu tempat.
+           Pilih situasimu, isi angkanya, langsung tahu hasilnya.</p>
       </div>
+
       <div className="grid">
-        {TILES.map(t=>(
+        {TILES.map((t,i)=>(
           <div key={t.id} className="tile" onClick={()=>go(t.id)}>
+            <span className="tnum">{String(i+1).padStart(2,"0")}</span>
             <span className="arrow">→</span>
             <div className="emo">{t.emo}</div>
             <h3>{t.title}</h3>
             <p>{t.desc}</p>
+            <span className="ttag">{t.tag}</span>
           </div>
         ))}
       </div>
+
       <div className="footer">
         Estimasi berdasarkan tarif pajak yang berlaku (PPh 21 PP 58/2023, PPh Final UMKM PP 55/2022, PPN 2025).<br/>
         Hasil bersifat simulasi, bukan pengganti perhitungan resmi.
@@ -346,8 +431,8 @@ function Karyawan({back}){
   let hi=Infinity; for(const [cap] of TER_A){ if(bruto<=cap){hi=cap;break;} }
 
   return (<div>
-    <PageHead back={back} emo="💼" title="Gaji karyawan"
-      sub="Simulasi PPh 21 — perbandingan tarif efektif rata-rata (TER) bulanan & tarif progresif setahun." />
+    <PageHead back={back} emo="💼" title="PPh 21 Karyawan"
+      sub="Simulasi pajak gaji — bandingkan potongan TER bulanan (Jan–Nov) vs perhitungan progresif setahun, lalu lihat rekonsiliasi masa Desember." />
 
     <div className="empcols">
       {/* col 1 */}
