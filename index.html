@@ -700,7 +700,6 @@ function PPN({back}){
             <div className="ln"><span>DPP (harga penuh)</span><span className="v">{fmt(dpp)}</span></div>
             <div className="ln indent"><span>12% × {fmt(dpp)}</span><span className="v">{fmt(ppn)}</span></div>
           </>)}
-          <div className="ln"><span>Tarif efektif</span><span className="v">{pct.toLocaleString("id-ID",{maximumFractionDigits:2})}%</span></div>
           <div className="ln total"><span>Total dibayar</span><span className="v">{fmt(total)}</span></div>
         </Breakdown>
       </div>
