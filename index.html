@@ -171,6 +171,7 @@
   .seg{display:flex;background:var(--cream-input);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;margin-top:6px;}
   .seg button{flex:1;border:none;background:none;padding:12px;border-radius:9px;font-weight:600;font-size:14px;cursor:pointer;color:var(--muted);font-family:'Inter';}
   .seg button.on{background:var(--green);color:#fff;}
+  .seg3 button{font-size:13px;padding:11px 6px;}
   .switchrow{display:flex;justify-content:space-between;align-items:center;background:var(--cream-input);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:14px;}
   .switchrow .t b{font-size:14.5px;}
   .switchrow .t span{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;max-width:300px;}
@@ -277,6 +278,8 @@ const {useState, useMemo} = React;
 const fmt = n => "Rp " + Math.round(n).toLocaleString("id-ID");
 const fmtNum = n => Math.round(n).toLocaleString("id-ID");
 const parseNum = s => Number(String(s).replace(/[^0-9]/g,"")) || 0;
+// tampilkan angka besar, atau tanda strip kalau input masih kosong/0
+const bigOr = (cond, value) => cond ? value : "—";
 
 function MoneyInput({value, onChange, plain, mini, placeholder}){
   const display = value ? fmtNum(value) : "";
@@ -372,21 +375,60 @@ const PTKP = {
   "TK/0":54000000,"TK/1":58500000,"TK/2":63000000,"TK/3":67500000,
   "K/0":58500000,"K/1":63000000,"K/2":67500000,"K/3":72000000,
 };
-// TER bulanan kategori A (PP 58/2023) — tabel progresif berdasarkan bruto bulanan
+// Pemetaan status PTKP -> kategori TER (PP 58/2023 & PMK 168/2023)
+// A: TK/0, TK/1, K/0 | B: TK/2, TK/3, K/1, K/2 | C: K/3
+const TER_KATEGORI = {
+  "TK/0":"A","TK/1":"A","K/0":"A",
+  "TK/2":"B","TK/3":"B","K/1":"B","K/2":"B",
+  "K/3":"C",
+};
+
+// Tabel TER bulanan kategori A (44 lapisan)
 const TER_A = [
   [5400000,0],[5650000,0.0025],[5950000,0.005],[6300000,0.0075],[6750000,0.01],
   [7500000,0.0125],[8550000,0.015],[9650000,0.0175],[10050000,0.02],[10350000,0.0225],
-  [10700000,0.025],[11050000,0.03],[11600000,0.035],[12500000,0.04],[13750000,0.05],
-  [15100000,0.06],[16950000,0.07],[19750000,0.08],[24150000,0.09],[26450000,0.10],
-  [28000000,0.11],[30050000,0.12],[32400000,0.13],[35400000,0.14],[39100000,0.15],
-  [43850000,0.16],[47800000,0.17],[51400000,0.18],[56300000,0.19],[62200000,0.20],
-  [68600000,0.21],[77500000,0.22],[89000000,0.23],[103000000,0.24],[125000000,0.25],
-  [157000000,0.26],[206000000,0.27],[337000000,0.28],[454000000,0.29],[550000000,0.30],
-  [695000000,0.31],[910000000,0.32],[1400000000,0.33],[Infinity,0.34],
+  [10700000,0.025],[11050000,0.0275],[11600000,0.03],[12500000,0.0325],[13750000,0.035],
+  [15100000,0.0375],[16950000,0.04],[19750000,0.0425],[24150000,0.045],[26450000,0.0475],
+  [28000000,0.05],[30050000,0.0525],[32400000,0.055],[35400000,0.0575],[39100000,0.06],
+  [43850000,0.0625],[47800000,0.065],[51400000,0.0675],[56300000,0.07],[62200000,0.0725],
+  [68600000,0.075],[77500000,0.0775],[89000000,0.08],[103000000,0.085],[125000000,0.09],
+  [157000000,0.095],[206000000,0.10],[337000000,0.15],[454000000,0.20],[550000000,0.25],
+  [1400000000,0.30],[Infinity,0.34],
 ];
-function terRate(bruto){
-  for(const [cap,rate] of TER_A){ if(bruto<=cap) return rate; }
+// Tabel TER bulanan kategori B (40 lapisan)
+const TER_B = [
+  [6200000,0],[6500000,0.0025],[6850000,0.005],[7300000,0.0075],[9200000,0.01],
+  [10750000,0.0125],[11250000,0.015],[11600000,0.0175],[12600000,0.02],[13600000,0.0225],
+  [14950000,0.025],[16400000,0.0275],[18450000,0.03],[21850000,0.0325],[26000000,0.035],
+  [27700000,0.0375],[29350000,0.04],[31450000,0.0425],[33950000,0.045],[37100000,0.0475],
+  [41100000,0.05],[45800000,0.0525],[49500000,0.055],[53800000,0.0575],[58500000,0.06],
+  [64000000,0.0625],[71000000,0.065],[80000000,0.0675],[93000000,0.07],[109000000,0.0725],
+  [129000000,0.075],[163000000,0.08],[211000000,0.085],[374000000,0.09],[459000000,0.15],
+  [555000000,0.20],[704000000,0.25],[1405000000,0.30],[Infinity,0.34],
+];
+// Tabel TER bulanan kategori C (41 lapisan)
+const TER_C = [
+  [6600000,0],[6950000,0.0025],[7350000,0.005],[7800000,0.0075],[8850000,0.01],
+  [9800000,0.0125],[10950000,0.015],[11200000,0.0175],[12050000,0.02],[12950000,0.0225],
+  [14150000,0.025],[15550000,0.0275],[17050000,0.03],[19500000,0.0325],[22700000,0.035],
+  [26600000,0.0375],[28100000,0.04],[30100000,0.0425],[32600000,0.045],[35400000,0.0475],
+  [38900000,0.05],[43000000,0.0525],[47400000,0.055],[51200000,0.0575],[55800000,0.06],
+  [60400000,0.0625],[66700000,0.065],[74500000,0.0675],[83200000,0.07],[95600000,0.0725],
+  [110000000,0.075],[134000000,0.08],[169000000,0.085],[221000000,0.09],[390000000,0.15],
+  [463000000,0.20],[561000000,0.25],[709000000,0.30],[1419000000,0.32],[Infinity,0.34],
+];
+const TER_TABLES = {A:TER_A, B:TER_B, C:TER_C};
+
+function terRate(bruto, kategori){
+  const tbl = TER_TABLES[kategori] || TER_A;
+  for(const [cap,rate] of tbl){ if(bruto<=cap) return rate; }
   return 0.34;
+}
+function terRange(bruto, kategori){
+  const tbl = TER_TABLES[kategori] || TER_A;
+  let lo=0;
+  for(const [cap] of tbl){ if(bruto<=cap) return [lo, cap]; lo=cap; }
+  return [lo, Infinity];
 }
 // progresif pasal 17
 const BRACKETS = [
@@ -410,25 +452,28 @@ function Karyawan({back}){
   const [bruto,setBruto]=useState(10000000);
   const [pensiun,setPensiun]=useState(100000);
   const [bonus,setBonus]=useState(0);
+  const [bulanKerja,setBulanKerja]=useState(12);
 
   const ptkp = PTKP[status];
-  const rate = terRate(bruto);
+  const kategori = TER_KATEGORI[status];
+  const rate = terRate(bruto, kategori);
   const terMonth = Math.round(bruto*rate);
-  const terTotal = terMonth*11; // Jan-Nov
+  // TER dipotong tiap bulan kerja kecuali bulan terakhir (Desember/masa pajak terakhir)
+  const bulanTER = Math.max(0, bulanKerja-1);
+  const terTotal = terMonth*bulanTER;
 
-  // progresif setahun
-  const grossYear = bruto*12 + bonus;
-  const biayaJabatan = Math.min(grossYear*0.05, 6000000);
-  const pensiunYear = pensiun*12;
+  // progresif untuk masa pajak terakhir (disetahunkan sesuai jumlah bulan kerja)
+  const grossYear = bruto*bulanKerja + bonus;
+  const biayaJabatan = Math.min(grossYear*0.05, 500000*bulanKerja);
+  const pensiunYear = pensiun*bulanKerja;
   const neto = grossYear - biayaJabatan - pensiunYear;
   const pkp = Math.max(0, Math.floor((neto - ptkp)/1000)*1000);
   const {tax:taxYear, layers} = progresif(pkp);
 
   const desember = Math.round(taxYear - terTotal);
 
-  // TER range display
-  let lo=0; for(const [cap] of TER_A){ if(bruto<=cap){ break;} lo=cap; }
-  let hi=Infinity; for(const [cap] of TER_A){ if(bruto<=cap){hi=cap;break;} }
+  // TER range display sesuai kategori
+  const [lo,hi] = terRange(bruto, kategori);
 
   return (<div>
     <PageHead back={back} emo="💼" title="PPh 21 Karyawan"
@@ -451,38 +496,47 @@ function Karyawan({back}){
         <label className="fld">Bonus / THR / Kinerja (setahun)</label>
         <MoneyInput value={bonus} onChange={setBonus}/>
         <div className="small" style={{marginTop:6}}>Hanya menambah komponen bruto progresif di akhir tahun.</div>
+        <label className="fld">Jumlah bulan bekerja (tahun ini)</label>
+        <select value={bulanKerja} onChange={e=>setBulanKerja(Number(e.target.value))}>
+          {[12,11,10,9,8,7,6,5,4,3,2,1].map(n=>(
+            <option key={n} value={n}>{n} bulan</option>
+          ))}
+        </select>
+        <div className="small" style={{marginTop:6}}>Pilih lebih kecil dari 12 jika baru masuk/berhenti kerja di tengah tahun.</div>
 
         <div className="terbox" style={{marginTop:20}}>
           <div className="sectlbl" style={{margin:"0 0 8px"}}>Info Ringkas</div>
           <div className="erow"><span>Nilai PTKP setahun</span><span className="v">{fmt(ptkp)}</span></div>
+          <div className="erow"><span>Kategori TER (otomatis)</span><span className="v blue">Kategori {kategori}</span></div>
           <div className="erow"><span>Tarif TER bulan ini</span><span className="v blue">{(rate*100).toLocaleString("id-ID")}%</span></div>
         </div>
       </div>
 
       {/* col 2 — TER */}
       <div className="empcol">
-        <div className="step"><span className="n blue">2</span><h4>Metode TER (Jan–Nov)</h4></div>
+        <div className="step"><span className="n blue">2</span><h4>Metode TER (Masa Awal)</h4></div>
         <div className="terbox">
+          <div className="erow"><span>Kategori TER</span><span className="v blue">Kategori {kategori}</span></div>
           <div className="erow"><span>Persentase Tarif TER</span><span className="v blue">{(rate*100).toLocaleString("id-ID")}%</span></div>
           <div className="erow"><span>Rentang bruto kategori</span>
             <span className="v blue">{fmt(lo+1)} – {hi===Infinity?"∞":fmt(hi)}</span></div>
           <div className="erow"><span>TER terutang / bulan</span><span className="v">{fmt(terMonth)}</span></div>
-          <div className="terhl"><b>Total terpotong (11 bulan)</b><span className="v">{fmt(terTotal)}</span></div>
+          <div className="terhl"><b>Total terpotong ({bulanTER} bulan)</b><span className="v">{fmt(terTotal)}</span></div>
         </div>
         <div className="small" style={{marginTop:14,lineHeight:1.5}}>
-          TER dihitung langsung dari Penghasilan Bruto Sebulan × %Tarif TER kategori, sesuai PP No. 58 Tahun 2023.
+          TER kategori {kategori} dipilih otomatis dari status PTKP. Dihitung dari Penghasilan Bruto Sebulan × %Tarif TER, sesuai PP No. 58 Tahun 2023. Bulan terakhir memakai metode progresif.
         </div>
       </div>
 
       {/* col 3 — progresif */}
       <div className="empcol">
         <div className="step"><span className="n green">3</span><h4>Metode Progresif (Setahun)</h4></div>
-        <div className="erow"><span>Gaji pokok disetahunkan (12×)</span><span className="v">{fmt(bruto*12)}</span></div>
+        <div className="erow"><span>Gaji pokok ({bulanKerja}×)</span><span className="v">{fmt(bruto*bulanKerja)}</span></div>
         <div className="erow"><span>(+) Bonus / THR (setahun)</span><span className="v blue">{fmt(bonus)}</span></div>
         <div className="erow" style={{fontWeight:700}}><span>Total bruto kumulatif</span><span className="v">{fmt(grossYear)}</span></div>
         <div className="erow"><span>(−) Biaya jabatan (5%, maks 6jt)</span><span className="v red">−{fmt(biayaJabatan)}</span></div>
-        <div className="erow"><span>(−) Iuran pensiun (setahun)</span><span className="v red">−{fmt(pensiunYear)}</span></div>
-        <div className="erow" style={{fontWeight:700}}><span>Penghasilan neto setahun</span><span className="v">{fmt(neto)}</span></div>
+        <div className="erow"><span>(−) Iuran pensiun</span><span className="v red">−{fmt(pensiunYear)}</span></div>
+        <div className="erow" style={{fontWeight:700}}><span>Penghasilan neto</span><span className="v">{fmt(neto)}</span></div>
         <div className="erow"><span>(−) PTKP</span><span className="v red">−{fmt(ptkp)}</span></div>
         <div className="erow hl"><span>Penghasilan Kena Pajak (PKP)</span><span className="v">{fmt(pkp)}</span></div>
 
@@ -499,7 +553,7 @@ function Karyawan({back}){
 
     {/* rekonsiliasi */}
     <div className="recon">
-      <div className="rt">👑 Rekonsiliasi & Kesimpulan Masa Desember</div>
+      <div className="rt">👑 Rekonsiliasi & Kesimpulan Masa Terakhir</div>
       <div className="rgrid">
         <div className="rcard good">
           <div className="rl">A. Beban pajak riil (setahun)</div>
@@ -507,23 +561,26 @@ function Karyawan({back}){
           <div className="rd">Dihitung dengan skema progresif Pasal 17.</div>
         </div>
         <div className="rcard">
-          <div className="rl">B. Total terbayar via TER (Jan–Nov)</div>
+          <div className="rl">B. Total terbayar via TER</div>
           <div className="rv" style={{color:"#7fb6f0"}}>{fmt(terTotal)}</div>
-          <div className="rd">Akumulasi pemotongan 11 bulan pertama.</div>
+          <div className="rd">Akumulasi pemotongan {bulanTER} bulan pertama.</div>
         </div>
         {desember>=0 ? (
           <div className="rcard danger">
-            <div className="rl">🔴 Kurang bayar (Masa Desember)</div>
+            <div className="rl">🔴 Kurang bayar (Masa Terakhir)</div>
             <div className="rv">{fmt(Math.abs(desember))}</div>
-            <div className="rd">Sisa pajak yang dipotong perusahaan pada bulan Desember.</div>
+            <div className="rd">Sisa pajak yang dipotong perusahaan pada bulan terakhir.</div>
           </div>
         ) : (
           <div className="rcard good">
-            <div className="rl">🟢 Lebih bayar (Masa Desember)</div>
+            <div className="rl">🟢 Lebih bayar (Masa Terakhir)</div>
             <div className="rv">{fmt(Math.abs(desember))}</div>
-            <div className="rd">Kelebihan potong yang dikembalikan di bulan Desember.</div>
+            <div className="rd">Kelebihan potong yang dikembalikan di bulan terakhir.</div>
           </div>
         )}
+      </div>
+      <div className="small" style={{color:"#9a9285",marginTop:16,lineHeight:1.5}}>
+        Simulasi mengasumsikan gaji tetap sepanjang masa kerja. Hasil dapat berbeda jika gaji berubah tiap bulan, ada potongan lain, atau ada penghasilan dari pemberi kerja lain.
       </div>
     </div>
   </div>);
@@ -531,55 +588,147 @@ function Karyawan({back}){
 
 // ========================================================
 // 2. PEKERJA BEBAS (bukan pegawai) — 50% DPP, progresif
+//    Mode: sekali bayar  |  berkesinambungan (kumulatif setahun)
 // ========================================================
 function Bebas({back}){
+  const [mode,setMode]=useState("sekali"); // sekali | rutin
   const [bayar,setBayar]=useState(20000000);
-  const dpp = bayar*0.5;
-  // tarif pasal 17 lapisan 1 (5%) untuk pembayaran tunggal di bawah 60jt DPP
-  const {tax} = progresif(dpp);
-  const bersih = bayar - tax;
-  const pct = bayar>0 ? (tax/bayar*100) : 0;
+  const [months,setMonths]=useState(Array(12).fill(20000000));
 
-  // breakdown layers that are non-zero
-  const {layers} = progresif(dpp);
-  const activeLayers = layers.filter(l=>l.amt>0);
+  const setMonth=(i,v)=>setMonths(m=>m.map((x,j)=>j===i?v:x));
+  const fillAll=v=>setMonths(Array(12).fill(v));
+
+  if(mode==="sekali"){
+    const dpp = bayar*0.5;
+    const {tax,layers} = progresif(dpp);
+    const bersih = bayar - tax;
+    const pct = bayar>0 ? (tax/bayar*100) : 0;
+    const activeLayers = layers.filter(l=>l.amt>0);
+
+    return (<div>
+      <PageHead back={back} emo="💻" title="Pekerja Bebas"
+        sub="Honor, komisi, atau bayaran sebagai bukan pegawai (freelancer, tenaga ahli)." />
+      <div className="cols">
+        <div>
+          <div className="panel">
+            <label className="fld">Jenis penghasilan</label>
+            <div className="seg">
+              <button className={mode==="sekali"?"on":""} onClick={()=>setMode("sekali")}>Honor sekali bayar</button>
+              <button className={mode==="rutin"?"on":""} onClick={()=>setMode("rutin")}>Rutin / berkesinambungan</button>
+            </div>
+            <h4 style={{marginTop:20}}>Berapa bayaran yang kamu terima?</h4>
+            <div className="hint">Nilai sebelum dipotong pajak, untuk satu pembayaran.</div>
+            <MoneyInput value={bayar} onChange={setBayar}/>
+            <div className="note">
+              <span className="i">ⓘ</span>
+              <span>Untuk bukan pegawai, hanya <b>separuh</b> bayaran yang dihitung sebagai dasar kena pajak, lalu dikenai tarif progresif Pasal 17. Mode ini untuk honor yang diterima <b>sekali</b> / tidak rutin.</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="result">
+            <div className="lbl">Kamu terima bersih</div>
+            <div className="big">{bigOr(bayar>0, fmt(bersih))}</div>
+            <div className="sub">Pajak dipotong: {fmt(tax)} ({pct.toLocaleString("id-ID",{maximumFractionDigits:2})}% dari bruto)</div>
+            <div className="bar"><div className="fill" style={{width:Math.min(pct,100)+"%"}}></div></div>
+            <div className="legend">
+              <span><span className="dot" style={{background:"#fff"}}></span>Diterima {fmt(bersih)}</span>
+              <span><span className="dot" style={{background:"var(--gold)"}}></span>Pajak {fmt(tax)}</span>
+            </div>
+          </div>
+          <Breakdown>
+            <div className="ttl">Cara perhitungannya</div>
+            <div className="ln"><span>Bayaran bruto</span><span className="v">{fmt(bayar)}</span></div>
+            <div className="ln"><span>Dasar kena pajak (50%)</span><span className="v">{fmt(dpp)}</span></div>
+            {activeLayers.length===0
+              ? <div className="ln indent"><span>Belum kena pajak</span><span className="v">{fmt(0)}</span></div>
+              : activeLayers.map((l,i)=>(
+                <div className="ln indent" key={i}><span>{(l.rate*100)}% × {fmt(l.amt)}</span><span className="v">{fmt(l.tax)}</span></div>
+              ))}
+            <div className="ln total"><span>Pajak (PPh 21) terutang</span><span className="v">{fmt(tax)}</span></div>
+          </Breakdown>
+        </div>
+      </div>
+    </div>);
+  }
+
+  // ----- mode rutin: kumulatif sepanjang tahun -----
+  const MONTHS_B = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  let cumDPP=0, cumTaxBefore=0;
+  const rows = months.map((m,i)=>{
+    const dppM = m*0.5;
+    const before = cumDPP;
+    cumDPP += dppM;
+    const taxCumNow = progresif(cumDPP).tax;
+    const taxThisMonth = taxCumNow - cumTaxBefore;
+    cumTaxBefore = taxCumNow;
+    return {bulan:MONTHS_B[i], bruto:m, dpp:dppM, cumDPP, tax:Math.max(0,taxThisMonth)};
+  });
+  const totalBruto = months.reduce((a,b)=>a+b,0);
+  const totalDPP = totalBruto*0.5;
+  const totalTax = progresif(totalDPP).tax;
+  const totalBersih = totalBruto - totalTax;
+  const pctR = totalBruto>0 ? (totalTax/totalBruto*100) : 0;
 
   return (<div>
-    <PageHead back={back} emo="💻" title="Pekerja bebas"
+    <PageHead back={back} emo="💻" title="Pekerja Bebas"
       sub="Honor, komisi, atau bayaran sebagai bukan pegawai (freelancer, tenaga ahli)." />
     <div className="cols">
       <div>
         <div className="panel">
-          <h4>Berapa bayaran yang kamu terima?</h4>
-          <div className="hint">Nilai sebelum dipotong pajak, untuk satu pembayaran.</div>
-          <MoneyInput value={bayar} onChange={setBayar}/>
+          <label className="fld">Jenis penghasilan</label>
+          <div className="seg">
+            <button className={mode==="sekali"?"on":""} onClick={()=>setMode("sekali")}>Honor sekali bayar</button>
+            <button className={mode==="rutin"?"on":""} onClick={()=>setMode("rutin")}>Rutin / berkesinambungan</button>
+          </div>
+
+          <h4 style={{marginTop:20}}>Bayaran tiap bulan (1 tahun)</h4>
+          <div className="hint">Nilai bruto sebelum dipotong pajak, dari pemberi kerja yang sama.</div>
+          <div className="mtools">
+            <button onClick={()=>fillAll(20000000)}>Isi semua 20 jt</button>
+            <button onClick={()=>fillAll(months[0])}>Samakan dgn Januari</button>
+            <button onClick={()=>fillAll(0)}>Kosongkan</button>
+          </div>
+          <div className="months">
+            {months.map((m,i)=>(
+              <div className="mfield" key={i}>
+                <label>{MONTHS_B[i]}</label>
+                <MoneyInput value={m} onChange={v=>setMonth(i,v)}/>
+              </div>
+            ))}
+          </div>
+          <div className="omzet-total"><span>Total bruto setahun</span><b>{fmt(totalBruto)}</b></div>
           <div className="note">
             <span className="i">ⓘ</span>
-            <span>Untuk bukan pegawai, hanya <b>separuh</b> bayaran yang dihitung sebagai penghasilan kena pajak, lalu dikenai tarif progresif. Jika ini penghasilan rutin dari pemberi kerja yang sama, pajak dihitung kumulatif sepanjang tahun.</span>
+            <span>Untuk penghasilan <b>berkesinambungan</b> dari pemberi kerja yang sama, dasar kena pajak (50% tiap bulan) <b>ditumpuk</b> sepanjang tahun, sehingga tarif progresif naik mengikuti total kumulatif.</span>
           </div>
         </div>
       </div>
 
       <div>
         <div className="result">
-          <div className="lbl">Kamu terima bersih</div>
-          <div className="big">{fmt(bersih)}</div>
-          <div className="sub">Pajak dipotong: {fmt(tax)} ({pct.toLocaleString("id-ID",{maximumFractionDigits:2})}% dari bruto)</div>
-          <div className="bar"><div className="fill" style={{width:pct+"%"}}></div></div>
+          <div className="lbl">Total terima bersih (setahun)</div>
+          <div className="big">{bigOr(totalBruto>0, fmt(totalBersih))}</div>
+          <div className="sub">Pajak setahun: {fmt(totalTax)} ({pctR.toLocaleString("id-ID",{maximumFractionDigits:2})}% dari bruto)</div>
+          <div className="bar"><div className="fill" style={{width:Math.min(pctR,100)+"%"}}></div></div>
           <div className="legend">
-            <span><span className="dot" style={{background:"#fff"}}></span>Diterima {fmt(bersih)}</span>
-            <span><span className="dot" style={{background:"var(--gold)"}}></span>Pajak {fmt(tax)}</span>
+            <span><span className="dot" style={{background:"#fff"}}></span>Diterima {fmt(totalBersih)}</span>
+            <span><span className="dot" style={{background:"var(--gold)"}}></span>Pajak {fmt(totalTax)}</span>
+          </div>
+          <div className="splitrow">
+            <div className="c"><div className="k">Total DPP (50%)</div><div className="v">{fmt(totalDPP)}</div></div>
+            <div className="c"><div className="k">Bruto setahun</div><div className="v">{fmt(totalBruto)}</div></div>
           </div>
         </div>
-
         <Breakdown>
-          <div className="ttl">Cara perhitungannya</div>
-          <div className="ln"><span>Bayaran bruto</span><span className="v">{fmt(bayar)}</span></div>
-          <div className="ln"><span>Dasar kena pajak (50%)</span><span className="v">{fmt(dpp)}</span></div>
-          {activeLayers.map((l,i)=>(
-            <div className="ln indent" key={i}><span>{(l.rate*100)}% × {fmt(l.amt)}</span><span className="v">{fmt(l.tax)}</span></div>
+          <div className="ttl">Rincian pajak per bulan (kumulatif)</div>
+          {rows.map((r,i)=>(
+            <div className="ln" key={i}>
+              <span>{r.bulan} — DPP kum. {fmt(r.cumDPP)}</span>
+              <span className="v">{fmt(r.tax)}</span>
+            </div>
           ))}
-          <div className="ln total"><span>Pajak (PPh 21) terutang</span><span className="v">{fmt(tax)}</span></div>
+          <div className="ln total"><span>Total PPh 21 setahun</span><span className="v">{fmt(totalTax)}</span></div>
         </Breakdown>
       </div>
     </div>
@@ -612,6 +761,7 @@ function UMKM({back}){
     return taxableThisMonth*0.005;
   });
   const avgMonth = pajakTahun/12;
+  const lewatBatas = omzetTahun > 4800000000;
 
   return (<div>
     <PageHead back={back} emo="🏪" title="Usaha kecil (UMKM)"
@@ -642,6 +792,13 @@ function UMKM({back}){
             <b>{fmt(omzetTahun)}</b>
           </div>
 
+          {lewatBatas && (
+            <div className="note" style={{background:"#f6dcdc",color:"#7a1414"}}>
+              <span className="i">⚠️</span>
+              <span>Omzet setahun <b>melebihi Rp 4,8 miliar</b>. Usaha tidak lagi memenuhi syarat tarif final UMKM 0,5% dan wajib menghitung pajak dengan skema umum (pembukuan). Hasil di samping hanya gambaran kasar.</span>
+            </div>
+          )}
+
           <label className="fld">Usaha ini atas nama?</label>
           <div className="seg">
             <button className={pribadi?"on":""} onClick={()=>setPribadi(true)}>Pribadi</button>
@@ -659,7 +816,7 @@ function UMKM({back}){
       <div>
         <div className="result">
           <div className="lbl">Pajak yang harus dibayar / tahun</div>
-          <div className="big">{fmt(pajakTahun)}</div>
+          <div className="big">{bigOr(omzetTahun>0, fmt(pajakTahun))}</div>
           <div className="sub">
             {pribadi
               ? "Rp 500 juta pertama setahun bebas pajak, sisanya kena 0,5%."
@@ -693,47 +850,29 @@ function UMKM({back}){
 }
 
 // ========================================================
-// 4. PPN — DPP 11/12 × harga, PPN 12% × DPP  (efektif 11%)
-//    Barang mewah: 12% penuh atas harga
+// 4. PPN — umum: 12% × (11/12 × harga) = efektif 11%
+//          mewah: 12% × harga penuh (sejak 1 Feb 2025)
+//          bebas: 0% (kebutuhan pokok & jasa tertentu)
 // ========================================================
 function PPN({back}){
   const [harga,setHarga]=useState(1000000);
   const [termasuk,setTermasuk]=useState(false);
-  const [mewah,setMewah]=useState(false);
+  const [jenis,setJenis]=useState("umum"); // umum | mewah | bebas
 
   let hargaDasar, dpp, ppn, total;
-  if(mewah){
-    // mewah: DPP = harga penuh, PPN 12%
-    if(termasuk){
-      total = harga;
-      hargaDasar = total/1.12;
-      ppn = total - hargaDasar;
-      dpp = hargaDasar;
-    } else {
-      hargaDasar = harga;
-      dpp = harga;
-      ppn = harga*0.12;
-      total = harga + ppn;
-    }
-  } else {
-    // umum: DPP = 11/12 × harga, PPN = 12% × DPP  → efektif 11%
-    if(termasuk){
-      // total sudah termasuk PPN. efektif 11%. harga dasar = total / 1.11
-      total = harga;
-      hargaDasar = total/1.11;
-      dpp = hargaDasar*(11/12);
-      ppn = total - hargaDasar;
-    } else {
-      hargaDasar = harga;
-      dpp = harga*(11/12);
-      ppn = dpp*0.12;
-      total = harga + ppn;
-    }
+  if(jenis==="bebas"){
+    hargaDasar = harga; dpp = 0; ppn = 0; total = harga;
+  } else if(jenis==="mewah"){
+    if(termasuk){ total=harga; hargaDasar=total/1.12; ppn=total-hargaDasar; dpp=hargaDasar; }
+    else { hargaDasar=harga; dpp=harga; ppn=harga*0.12; total=harga+ppn; }
+  } else { // umum
+    if(termasuk){ total=harga; hargaDasar=total/1.11; dpp=hargaDasar*(11/12); ppn=total-hargaDasar; }
+    else { hargaDasar=harga; dpp=harga*(11/12); ppn=dpp*0.12; total=harga+ppn; }
   }
   const pct = total>0 ? (ppn/total*100) : 0;
 
   return (<div>
-    <PageHead back={back} emo="🛍️" title="PPN sebuah harga"
+    <PageHead back={back} emo="🛍️" title="PPN Sebuah Harga"
       sub="Hitung Pajak Pertambahan Nilai dari harga barang atau jasa." />
     <div className="cols">
       <div>
@@ -742,20 +881,26 @@ function PPN({back}){
           <div className="hint">Harga barang atau jasa.</div>
           <MoneyInput value={harga} onChange={setHarga}/>
 
-          <div className="switchrow">
-            <div className="t"><b>Harga ini sudah termasuk PPN?</b>
-              <span>Nyalakan jika harga yang ditampilkan sudah final.</span></div>
-            <button className={"sw"+(termasuk?" on":"")} onClick={()=>setTermasuk(t=>!t)}></button>
+          <label className="fld">Jenis barang / jasa</label>
+          <div className="seg seg3">
+            <button className={jenis==="umum"?"on":""} onClick={()=>setJenis("umum")}>Umum</button>
+            <button className={jenis==="mewah"?"on":""} onClick={()=>setJenis("mewah")}>Mewah</button>
+            <button className={jenis==="bebas"?"on":""} onClick={()=>setJenis("bebas")}>Bebas PPN</button>
           </div>
-          <div className="switchrow">
-            <div className="t"><b>Barang mewah?</b>
-              <span>Mobil mewah, properti mewah, dll. dikenai 12% penuh.</span></div>
-            <button className={"sw"+(mewah?" on":"")} onClick={()=>setMewah(m=>!m)}></button>
-          </div>
+
+          {jenis!=="bebas" && (
+            <div className="switchrow">
+              <div className="t"><b>Harga ini sudah termasuk PPN?</b>
+                <span>Nyalakan jika harga yang ditampilkan sudah final.</span></div>
+              <button className={"sw"+(termasuk?" on":"")} onClick={()=>setTermasuk(t=>!t)}></button>
+            </div>
+          )}
 
           <div className="note">
             <span className="i">ⓘ</span>
-            <span>Sejak 2025, PPN <b>12%</b> dihitung atas DPP. Untuk barang umum DPP = <b>11/12 × harga</b> sehingga tarif efektifnya <b>11%</b>. Barang mewah dikenai 12% penuh, kebutuhan pokok bebas PPN.</span>
+            {jenis==="umum" && <span>Barang/jasa <b>umum</b>: PPN = 12% × (11/12 × harga), sehingga tarif efektifnya tetap <b>11%</b> seperti sebelumnya (PMK 131/2024).</span>}
+            {jenis==="mewah" && <span>Barang <b>mewah</b> (mobil mewah, properti mewah, dll.): sejak 1 Februari 2025 PPN = <b>12% × harga penuh</b>. Bisa ditambah PPnBM tersendiri di luar perhitungan ini.</span>}
+            {jenis==="bebas" && <span>Kebutuhan pokok (beras, daging, ikan, telur, sayur, susu segar) serta jasa pendidikan, kesehatan, dan angkutan umum <b>bebas PPN (0%)</b>.</span>}
           </div>
         </div>
       </div>
@@ -763,8 +908,8 @@ function PPN({back}){
       <div>
         <div className="result">
           <div className="lbl">PPN-nya</div>
-          <div className="big">{fmt(ppn)}</div>
-          <div className="bar"><div className="fill" style={{width:pct+"%"}}></div></div>
+          <div className="big">{bigOr(harga>0, fmt(ppn))}</div>
+          <div className="bar"><div className="fill" style={{width:Math.min(pct,100)+"%"}}></div></div>
           <div className="legend">
             <span><span className="dot" style={{background:"#fff"}}></span>Harga dasar {fmt(hargaDasar)}</span>
             <span><span className="dot" style={{background:"var(--gold)"}}></span>PPN {fmt(ppn)}</span>
@@ -778,10 +923,14 @@ function PPN({back}){
         <Breakdown>
           <div className="ttl">Cara perhitungannya</div>
           <div className="ln"><span>Harga dasar (sebelum PPN)</span><span className="v">{fmt(hargaDasar)}</span></div>
-          {!mewah ? (<>
+          {jenis==="bebas" && (
+            <div className="ln indent"><span>Bebas PPN (0%)</span><span className="v">{fmt(0)}</span></div>
+          )}
+          {jenis==="umum" && (<>
             <div className="ln"><span>DPP = 11/12 × harga dasar</span><span className="v">{fmt(dpp)}</span></div>
             <div className="ln indent"><span>12% × {fmt(dpp)}</span><span className="v">{fmt(ppn)}</span></div>
-          </>) : (<>
+          </>)}
+          {jenis==="mewah" && (<>
             <div className="ln"><span>DPP (harga penuh)</span><span className="v">{fmt(dpp)}</span></div>
             <div className="ln indent"><span>12% × {fmt(dpp)}</span><span className="v">{fmt(ppn)}</span></div>
           </>)}
